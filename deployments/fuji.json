@@ -581,6 +581,12 @@
       "campania": "2023/24",
       "txCrear": "0xfdca5d29e5b2303a64f6920a29dc8b2a03a24a59b43d5f911f5dd9bd71cba433",
       "txDepositar": "0x256a89c5c3282041f1b9b690159b784443c7e237c24145892a3f25302172157d"
+    },
+    {
+      "id": 3,
+      "campania": "2014/15",
+      "txCrear": "0x958ea9083fdf5ea5baf97002ea30900a9674a0bf7b159115518e88e4936bb47d",
+      "txDepositar": "0x3eadacf3441d480e2167dc5f94a16d573acd8e8a3236268aa1d7972448f6fc38"
     }
   ],
   "liquidaciones": [

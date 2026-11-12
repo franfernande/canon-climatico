@@ -60,7 +60,8 @@ export function GraficoLluvia({ historia, umbrales, destacadas }: Props) {
       </svg>
       <figcaption>
         Lluvia de diciembre más enero en cada campaña, de 2004/05 a 2024/25. El eje muestra el año en que empieza.
-        {destacadas.length > 0 && ` Con borde, las campañas de los contratos: ${destacadas.join(" y ")}.`}
+        {destacadas.length > 0 &&
+          ` Con borde, las campañas de los contratos: ${new Intl.ListFormat("es", { type: "conjunction" }).format(destacadas)}.`}
       </figcaption>
       <details>
         <summary>Ver los valores</summary>

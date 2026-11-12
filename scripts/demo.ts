@@ -3,7 +3,14 @@ import { guardarDespliegue, leerDespliegue, linkTx } from "./lib/despliegue.ts";
 import { ANTA, FUENTE, nombreDeCampania, ventanaDeCampania } from "./lib/power.ts";
 
 // Las dos campañas del video: 2024/25 fue seca y 2023/24, normal.
-const CAMPANIAS = [2024, 2023];
+const CAMPANIAS = process.env.CAMPANIAS
+  ? process.env.CAMPANIAS.split(",").map((anio) => Number(anio.trim()))
+  : [2024, 2023];
+for (const anio of CAMPANIAS) {
+  if (!Number.isInteger(anio) || ventanaDeCampania(anio).fin * 1000 > Date.now()) {
+    throw new Error(`CAMPANIAS: ${anio} no es el año de una campaña ya cerrada (2024 es la 2024/25)`);
+  }
+}
 const SALDO = "0.1";
 const GAS_POR_TX = "0.01";
 const UN_DIA = 24 * 3600;

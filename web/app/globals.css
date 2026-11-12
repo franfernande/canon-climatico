@@ -96,6 +96,20 @@ main.contenedor {
   font-size: 0.95rem;
 }
 
+.portada__accion {
+  margin: 16px 0 0;
+}
+
+.portada__accion a {
+  display: inline-block;
+  padding: 10px 16px;
+  border-radius: 8px;
+  background: var(--bajo);
+  color: #fff;
+  font-weight: 700;
+  text-decoration: none;
+}
+
 /* Tramos */
 .tramos {
   list-style: none;
