@@ -1,29 +1,86 @@
 import type { Metadata } from "next";
 import type { ReactNode } from "react";
-import { GraficoLluvia } from "@/components/GraficoLluvia";
-import { TarjetaAlquiler } from "@/components/TarjetaAlquiler";
-import { leerDatos, mm, mmEntero, tramoDe } from "@/lib/datos";
-import type { Tramo } from "@/lib/tipos";
+import { leerDatos, mmEntero } from "@/lib/datos";
 import s from "./deck.module.css";
 
 export const metadata: Metadata = {
   title: "Canon Climático · Pitch",
-  description: "Pitch de Canon Climático en siete slides, para el track Blockchain de Avalanche.",
+  description: "Pitch de Canon Climático, para el track Blockchain de Avalanche.",
 };
 
-const TOTAL = 7;
+const TOTAL = 5;
 
-function Slide({ n, oscura = false, children }: { n: number; oscura?: boolean; children: ReactNode }) {
+// La portada no lleva número: las slides del pitch son 5, dentro de las 5 a 7 que pide el track.
+function Slide({ n, oscura = false, children }: { n: number | null; oscura?: boolean; children: ReactNode }) {
   return (
-    <section className={oscura ? `${s.slide} ${s.oscura}` : s.slide} aria-label={`Slide ${n} de ${TOTAL}`}>
+    <section
+      className={oscura ? `${s.slide} ${s.oscura}` : s.slide}
+      aria-label={n === null ? "Portada" : `Slide ${n} de ${TOTAL}`}
+    >
       {children}
-      <footer className={s.pie}>
-        <span>Canon Climático · Track Blockchain de Avalanche · Hackathon Argentina Space 2026</span>
-        <span>
-          {n} / {TOTAL}
-        </span>
-      </footer>
+      {n !== null && (
+        <footer className={s.pie}>
+          <span>Canon Climático · Hackathon Argentina Space 2026</span>
+          <span>
+            {n} / {TOTAL}
+          </span>
+        </footer>
+      )}
     </section>
+  );
+}
+
+/** Un satélite mide la lluvia de una nube sobre un lote sembrado, marcado en Anta. */
+function Ilustracion() {
+  const franjas = 10;
+  const horizonte = 290;
+  return (
+    <svg viewBox="0 0 520 440" className={s.ilustracion} role="img" aria-label="Un satélite mide la lluvia sobre un lote sembrado en Anta">
+      {Array.from({ length: franjas }, (_, i) => {
+        const arriba = (k: number) => 140 + (k * 240) / franjas;
+        const abajo = (k: number) => (k * 520) / franjas;
+        return (
+          <polygon
+            key={i}
+            points={`${arriba(i)},${horizonte} ${arriba(i + 1)},${horizonte} ${abajo(i + 1)},440 ${abajo(i)},440`}
+            fill={i % 2 === 0 ? "#3f6b35" : "#6b5235"}
+          />
+        );
+      })}
+      <polygon points="418,96 268,330 342,330" fill="var(--bajo)" opacity="0.2" />
+      <g fill="#8a929c">
+        <circle cx="170" cy="150" r="34" />
+        <circle cx="215" cy="132" r="44" />
+        <circle cx="258" cy="155" r="30" />
+        <rect x="170" y="150" width="88" height="34" />
+      </g>
+      <g stroke="#8cc4ff" strokeWidth="4" strokeLinecap="round">
+        {[150, 175, 200, 225, 250].map((x, i) => (
+          <line key={x} x1={x + 8} y1={198 + (i % 2) * 14} x2={x} y2={222 + (i % 2) * 14} />
+        ))}
+        {[160, 190, 220, 245].map((x, i) => (
+          <line key={x} x1={x + 8} y1={246 + (i % 2) * 10} x2={x} y2={268 + (i % 2) * 10} />
+        ))}
+      </g>
+      <g transform="rotate(-25 420 72)">
+        <rect x="346" y="64" width="56" height="16" fill="#2f5d8a" stroke="#8fb3d9" strokeWidth="2" />
+        <rect x="438" y="64" width="56" height="16" fill="#2f5d8a" stroke="#8fb3d9" strokeWidth="2" />
+        <path d="M365 64v16M384 64v16M457 64v16M476 64v16" stroke="#8fb3d9" strokeWidth="1.5" />
+        <rect x="404" y="56" width="32" height="32" rx="3" fill="#c9ccd1" />
+        <path d="M420 88v10" stroke="#c9ccd1" strokeWidth="3" />
+        <circle cx="420" cy="101" r="5" fill="#c9ccd1" />
+      </g>
+      <path
+        d="M305 362c-14-18-22-30-22-42a22 22 0 1 1 44 0c0 12-8 24-22 42z"
+        fill="var(--bajo)"
+        stroke="#fff"
+        strokeWidth="2"
+      />
+      <circle cx="305" cy="320" r="8" fill="#fff" />
+      <text x="336" y="326" fill="#e4e6e9" fontSize="16" fontWeight="700">
+        Anta, Salta
+      </text>
+    </svg>
   );
 }
 
@@ -37,142 +94,107 @@ export default function Deck() {
     );
   }
 
-  const { umbrales, historia, alquileres, contrato, punto } = datos;
+  const { umbrales, historia, alquileres } = datos;
   const ejemplo = alquileres[0] ?? { pctMedio: 20, pctBajo: 50 };
-  const cuantas = (tramo: Tramo) => historia.filter((c) => tramoDe(c.lluviaDecimasMm, umbrales) === tramo).length;
-  const seca = historia.find((c) => c.campania === "2024/25");
-  const masSecas = seca ? historia.filter((c) => c.lluviaDecimasMm < seca.lluviaDecimasMm).length : 0;
-  const liquidados = alquileres.filter((a) => a.estado === "Liquidado").length;
 
   return (
     <main className={s.deck}>
-      <Slide n={1} oscura>
-        <p className={s.marca}>Canon Climático</p>
-        <div className={s.columnas}>
+      <Slide n={null} oscura>
+        <div className={s.portada}>
           <div>
-            <h1 className={s.titulo}>En Anta, si hay sequía, el arrendatario paga el alquiler igual.</h1>
-            <ul className={s.lista}>
+            <p className={s.marca}>Hackathon Argentina Space 2026 · Track Blockchain</p>
+            <h1 className={s.portadaTitulo}>Canon Climático</h1>
+            <p className={s.portadaSubtitulo}>
+              El saldo del alquiler rural se reparte solo, según la lluvia que mide un satélite.
+            </p>
+            <ul className={s.portadaDatos}>
+              <li>Alquiler de campo en Anta, Salta</li>
+              <li>Lluvia de NASA POWER</li>
+              <li>Contrato en Avalanche Fuji</li>
+            </ul>
+          </div>
+          <Ilustracion />
+        </div>
+      </Slide>
+
+      <Slide n={1} oscura>
+        <p className={s.marca}>El problema</p>
+        <div className={s.problema}>
+          <div>
+            <h2 className={s.titulo}>Si hay sequía, el arrendatario paga el alquiler igual.</h2>
+            <p className={s.contexto}>
+              En Anta, Salta, la soja se siembra sin riego. El campo se alquila a valor fijo: anticipo al firmar y saldo
+              en la cosecha.
+            </p>
+          </div>
+          <div>
+            <p className={s.subtitulo}>Hoy hay tres salidas</p>
+            <ul className={s.salidas}>
               <li>
-                La soja y el poroto se siembran a secano. El lote se alquila a un valor fijo: anticipo al firmar y saldo
-                en la cosecha.
+                <strong>Aparcería</strong>
+                <span className={s.falla}>Depende de lo que se declare cosechado</span>
               </li>
-              {seca && (
-                <li>
-                  En 2024/25 llovieron <strong>{mm(seca.lluviaDecimasMm)}</strong> en diciembre y enero. Solo {masSecas}{" "}
-                  de las {historia.length} campañas entre {historia[0].campania} y {historia[historia.length - 1].campania}{" "}
-                  fueron más secas.
-                </li>
-              )}
               <li>
-                Hay tres formas de compartir el riesgo y ninguna se ejecuta sola: aparcería, cláusula climática y teoría
-                de la imprevisión.
+                <strong>Cláusula climática</strong>
+                <span className={s.falla}>Se negocia después de la sequía</span>
+              </li>
+              <li>
+                <strong>Teoría de la imprevisión</strong>
+                <span className={s.falla}>Es un juicio lento y caro</span>
               </li>
             </ul>
           </div>
-          <div className={s.figura}>
-            <GraficoLluvia historia={historia} umbrales={umbrales} destacadas={["2024/25"]} />
-            <p className={s.epigrafe}>
-              Lluvia de diciembre y enero en Anta ({punto.latitud.toLocaleString("es-AR")},{" "}
-              {punto.longitud.toLocaleString("es-AR")}), por campaña. En rojo, las {cuantas("bajo")} de{" "}
-              {mmEntero(umbrales.bajo)} o menos; con borde, 2024/25. Fuente: NASA POWER.
-            </p>
-          </div>
         </div>
+        <p className={s.conclusion}>Ninguna se ejecuta sola.</p>
       </Slide>
 
       <Slide n={2}>
         <p className={s.marca}>La solución</p>
-        <h2 className={s.titulo}>El saldo del alquiler se reparte solo, según la lluvia que mide un satélite.</h2>
-        <p className={s.bajada}>
-          Cuando la lluvia de diciembre y enero en el lote queda por debajo del umbral acordado, el contrato le devuelve
-          al arrendatario una parte del saldo que depositó. Si no, le paga el saldo completo al dueño.
-        </p>
+        <h2 className={s.titulo}>El saldo va a un contrato y se reparte solo, según la lluvia.</h2>
         <ol className={`tramos ${s.tramos}`}>
           <li className="tramo tramo--alto">
             <span className="tramo__lluvia">Más de {mmEntero(umbrales.alto)}</span>
-            <span className="tramo__reparto">
-              100 % al dueño · {cuantas("alto")} de {historia.length} campañas
-            </span>
+            <span className="tramo__reparto">Todo al dueño</span>
           </li>
           <li className="tramo tramo--medio">
             <span className="tramo__lluvia">
               {mmEntero(umbrales.bajo)} a {mmEntero(umbrales.alto)}
             </span>
-            <span className="tramo__reparto">
-              {100 - ejemplo.pctMedio} % al dueño, {ejemplo.pctMedio} % al arrendatario · {cuantas("medio")} campañas
-            </span>
+            <span className="tramo__reparto">Vuelve el {ejemplo.pctMedio} % al arrendatario</span>
           </li>
           <li className="tramo tramo--bajo">
             <span className="tramo__lluvia">{mmEntero(umbrales.bajo)} o menos</span>
-            <span className="tramo__reparto">
-              {100 - ejemplo.pctBajo} % al dueño, {ejemplo.pctBajo} % al arrendatario · {cuantas("bajo")} campañas
-            </span>
+            <span className="tramo__reparto">Vuelve el {ejemplo.pctBajo} % al arrendatario</span>
           </li>
         </ol>
-        <ul className={`${s.lista} ${s.suave}`}>
-          <li>El anticipo se paga como siempre, por fuera del contrato. Para el dueño, el saldo existe desde el primer día.</li>
-          <li>Los porcentajes los fijan las partes al firmar. Los umbrales salen de la historia de la misma fuente.</li>
-        </ul>
+        <p className={s.nota}>
+          Lluvia de diciembre y enero en el lote. Umbrales calculados con {historia.length} campañas de NASA POWER.
+        </p>
       </Slide>
 
       <Slide n={3}>
         <p className={s.marca}>Cómo funciona</p>
-        <h2 className={s.titulo}>Del dato satelital al contrato en Avalanche.</h2>
+        <h2 className={s.titulo}>Tres pasos, sin intermediarios</h2>
         <div className={s.cajas}>
           <div className={s.caja}>
-            <h3>NASA POWER</h3>
-            <p>
-              Lluvia mensual corregida (<code>PRECTOTCORR_SUM</code>) del punto del lote. Es gratis, no pide clave y
-              cubre cualquier punto del planeta.
-            </p>
+            <h3>1. Firma</h3>
+            <p>El dueño fija las condiciones y el arrendatario deposita el saldo en el contrato.</p>
           </div>
           <span className={s.flecha} aria-hidden="true">
             →
           </span>
           <div className={s.caja}>
-            <h3>Relayer</h3>
-            <p>
-              Al cerrar la ventana pide el dato, guarda el JSON tal como llegó, calcula su SHA-256 y llama a{" "}
-              <code>liquidar</code>. No puede ser el dueño ni el arrendatario.
-            </p>
+            <h3>2. Dato</h3>
+            <p>Al cerrar enero, el relayer publica la lluvia de NASA POWER y el hash del dato.</p>
           </div>
           <span className={s.flecha} aria-hidden="true">
             →
           </span>
           <div className={s.caja}>
-            <h3>Contrato en Fuji</h3>
-            <p>
-              Calcula el tramo y anota lo que le toca a cada parte. Cada una lo cobra con <code>retirar</code>, así
-              ninguna puede trabar el cobro de la otra.
-            </p>
+            <h3>3. Reparto</h3>
+            <p>El contrato aplica los tramos y cada parte cobra lo suyo desde su wallet.</p>
           </div>
         </div>
-        <ol className={s.flujo}>
-          <li>
-            <code>crear</code>
-            <span>El dueño fija el punto, la ventana, los umbrales y el reparto.</span>
-            <span className={s.donde}>Pantalla del dueño, con su wallet</span>
-          </li>
-          <li>
-            <code>depositar</code>
-            <span>El arrendatario pone el saldo y con eso acepta.</span>
-            <span className={s.donde}>Pantalla del arrendatario, con su wallet</span>
-          </li>
-          <li>
-            <code>liquidar</code>
-            <span>El relayer publica la lluvia y el hash del dato.</span>
-            <span className={s.donde}>Relayer, solo cuando cierra la ventana</span>
-          </li>
-          <li>
-            <code>retirar</code>
-            <span>Cada parte cobra lo que tiene anotado.</span>
-            <span className={s.donde}>Pantalla de cobro, cada uno con su wallet</span>
-          </li>
-        </ol>
-        <p className={s.nota}>
-          Si a los 60 días del fin de la ventana nadie liquidó, cualquiera puede llamar a <code>reembolsar</code>, que
-          reparte el saldo según el tramo medio.
-        </p>
       </Slide>
 
       <Slide n={4}>
@@ -181,187 +203,54 @@ export default function Deck() {
         <div className={s.preguntas}>
           <div>
             <h3>¿Quién desconfía de quién?</h3>
-            <p>
-              El dueño teme no cobrar el saldo en un año malo. El arrendatario teme pagar el alquiler entero en una
-              sequía, o que el dueño no le devuelva su parte.
-            </p>
+            <p>El dueño teme no cobrar; el arrendatario, pagar entero en una sequía.</p>
           </div>
           <div>
-            <h3>¿Qué evento queda en la cadena?</h3>
-            <p>
-              Al cierre de la ventana, el contrato reparte el depósito según la lluvia. Las condiciones ya estaban
-              escritas desde la firma.
-            </p>
+            <h3>¿Qué queda en la cadena?</h3>
+            <p>Las condiciones al firmar y el reparto al cerrar la ventana.</p>
           </div>
           <div>
-            <h3>¿Qué pasa si el dato miente?</h3>
-            <p>
-              Fuente, punto, ventana, umbrales y relayer quedan fijos y públicos al crear el contrato. El relayer
-              publica la lluvia con el SHA-256 del JSON de NASA POWER, y cualquiera comprueba el hash, los valores y la
-              suma. Una mentira queda a la vista y firmada por su dirección.
-            </p>
+            <h3>¿Y si el dato miente?</h3>
+            <p>El hash del dato queda publicado: cualquiera lo verifica, y la mentira queda firmada.</p>
           </div>
           <div>
-            <h3>¿Quién paga y quién cobra?</h3>
-            <p>
-              El arrendatario paga una comisión por contrato, porque es quien compra la protección. Cobra Canon
-              Climático. El monto es un supuesto que hay que validar con usuarios.
-            </p>
+            <h3>¿Quién paga?</h3>
+            <p>El arrendatario, con una comisión por contrato.</p>
           </div>
         </div>
         <p className={s.comparacion}>
-          Con una cláusula en papel, el reparto depende de que dos partes con intereses opuestos se pongan de acuerdo
-          después de la sequía. Con el contrato, la regla queda escrita al firmar y la plata ya está adentro.
+          Con una cláusula en papel, el ajuste se negocia después. Con el contrato, la regla y la plata están desde la
+          firma.
         </p>
       </Slide>
 
       <Slide n={5}>
-        <p className={s.marca}>Demo en Avalanche Fuji</p>
-        <h2 className={s.titulo}>Cada parte firma desde su wallet</h2>
-        <ol className={s.pantallas}>
-          <li>
-            <strong>1. Wallets</strong>
-            <span>Se conecta Core o MetaMask, en la red Fuji.</span>
-            <span className={s.botonFalso}>Conectar MetaMask</span>
-          </li>
-          <li>
-            <strong>2. Pantalla del dueño</strong>
-            <span>Elige campaña, saldo, umbrales y porcentajes.</span>
-            <span className={s.botonFalso}>Firmar y crear el alquiler</span>
-          </li>
-          <li>
-            <strong>3. Pantalla del arrendatario</strong>
-            <span>Lee las condiciones en la cadena y las acepta.</span>
-            <span className={s.botonFalso}>Depositar y aceptar</span>
-          </li>
-          <li>
-            <strong>4. Liquidar y cobrar</strong>
-            <span>Al cerrar la ventana, el relayer publica la lluvia y cada uno retira lo suyo.</span>
-            <span className={s.botonFalso}>Retirar</span>
-          </li>
-        </ol>
-        {contrato && (
-          <p className={s.contrato}>
-            {liquidados} contratos liquidados en el contrato <a href={contrato.link}>{contrato.direccion}</a>, con la
-            lluvia real de NASA POWER:
-          </p>
-        )}
-        <div className={s.tarjetas}>
-          {alquileres
-            .filter((a) => a.estado === "Liquidado")
-            .map((a) => (
-              <TarjetaAlquiler key={a.id} a={a} />
-            ))}
-        </div>
-        <p className={s.nota}>
-          Cualquiera lo comprueba sin claves con <code>npm run verificar -- 1</code>: el hash, los valores y la suma.
-        </p>
-      </Slide>
-
-      <Slide n={6}>
-        <p className={s.marca}>Modelo</p>
+        <p className={s.marca}>Modelo de negocio</p>
         <h2 className={s.titulo}>Quién paga y quién cobra</h2>
-        <div className={s.columnas}>
-          <dl className={s.modelo}>
-            <div>
-              <dt>Quién lo usa</dt>
-              <dd>El dueño del campo y el arrendatario, en zonas de secano con riesgo de sequía, como Anta.</dd>
-            </div>
-            <div>
-              <dt>Quién paga</dt>
-              <dd>
-                El arrendatario, con una comisión por cada contrato liquidado. <em>Supuesto.</em>
-              </dd>
-            </div>
-            <div>
-              <dt>Por dónde llega</dt>
-              <dd>
-                Corredores rurales y administradoras de campos, que ya redactan estos contratos. <em>Supuesto.</em>
-              </dd>
-            </div>
-            <div>
-              <dt>Costo de operar</dt>
-              <dd>El gas en Avalanche y un relayer. El dato es gratis.</dd>
-            </div>
-          </dl>
-          <table className={s.tabla}>
-            <caption>Contra qué compite</caption>
-            <thead>
-              <tr>
-                <th scope="col">Lo que se usa hoy</th>
-                <th scope="col">Dónde falla</th>
-              </tr>
-            </thead>
-            <tbody>
-              <tr>
-                <td>Alquiler fijo con anticipo</td>
-                <td>El arrendatario carga con todo el riesgo</td>
-              </tr>
-              <tr>
-                <td>Aparcería</td>
-                <td>Depende de lo que el arrendatario declare que cosechó</td>
-              </tr>
-              <tr>
-                <td>Cláusula climática (CREA)</td>
-                <td>El ajuste se acuerda después del evento</td>
-              </tr>
-              <tr>
-                <td>Teoría de la imprevisión</td>
-                <td>Es un reclamo, lento y caro</td>
-              </tr>
-              <tr>
-                <td>Escribano o fideicomiso</td>
-                <td>Un tercero custodia la plata, aplica la regla y cobra por hacerlo</td>
-              </tr>
-            </tbody>
-          </table>
-        </div>
-      </Slide>
-
-      <Slide n={7}>
-        <p className={s.marca}>Próximos pasos y fuentes</p>
-        <h2 className={s.titulo}>Lo que sigue</h2>
-        <div className={s.columnas}>
+        <div className={s.preguntas}>
           <div>
-            <h3>Próximos pasos</h3>
-            <ul className={s.lista}>
-              <li>Expresar el saldo en quintales de soja, con el precio pizarra.</li>
-              <li>Una segunda fuente de lluvia o varios relayers, con mediana y plazo de disputa.</li>
-              <li>Medir la superficie sembrada con Sentinel-2, como plantea la cláusula de CREA.</li>
-              <li>Que el dueño cargue la wallet del arrendatario y cada parte use la suya.</li>
-              <li>Pagar en USDC.</li>
-            </ul>
+            <h3>Paga</h3>
+            <p>El arrendatario: una comisión por contrato, porque compra la protección.</p>
           </div>
           <div>
-            <h3>Supuestos y límites</h3>
-            <ul className={s.lista}>
-              <li>Es un índice, no una medición del lote: la grilla de NASA POWER es de 0,5° × 0,625°.</li>
-              <li>La ventana de diciembre y enero hay que confirmarla con productores.</li>
-              <li>Que las partes acepten una stablecoin es un supuesto.</li>
-              <li>En el MVP hay un solo relayer, y las wallets de la demo son fijas.</li>
-            </ul>
+            <h3>Cobra</h3>
+            <p>Canon Climático.</p>
+          </div>
+          <div>
+            <h3>Canal</h3>
+            <p>Corredores rurales y administradoras de campos, que ya redactan estos contratos.</p>
+          </div>
+          <div>
+            <h3>Costo</h3>
+            <p>El gas en Avalanche y un relayer. El dato es gratis.</p>
           </div>
         </div>
-        <div className={s.fuentes}>
-          <p>
-            Datos: NASA POWER, lluvia mensual corregida (PRECTOTCORR_SUM). «These data were obtained from the NASA
-            Langley Research Center (LaRC) POWER Project funded through the NASA Earth Science/Applied Science Program.»
-          </p>
-          <p>
-            <a href="https://www.contenidoscrea.org.ar/agricultura/desastre-agropecuario-clausulas-climaticas-contratos-arrendamientos-n5328137">
-              Contenidos CREA
-            </a>
-            , cláusulas climáticas en contratos de arrendamiento ·{" "}
-            <a href="https://news.agrofy.com.ar/noticia/214504/que-pasa-alquiler-zonas-inundadas-pago-hectarea-efectiva-y-ajuste-mensual-imagenes">
-              Agrofy News
-            </a>
-            , pago por hectárea efectiva con imágenes satelitales ·{" "}
-            <a href="https://build.avax.network/docs/primary-network">Documentación de Avalanche</a>
-          </p>
-          <p>
-            Código: <a href="https://github.com/franfernande/canon-climatico">github.com/franfernande/canon-climatico</a>
-          </p>
-        </div>
+        <p className={s.nota}>El monto de la comisión y el canal son supuestos a validar con usuarios.</p>
+        <p className={s.fuentes}>
+          Datos: NASA POWER, lluvia mensual corregida (PRECTOTCORR_SUM). «These data were obtained from the NASA Langley
+          Research Center (LaRC) POWER Project funded through the NASA Earth Science/Applied Science Program.» · Código:{" "}
+          <a href="https://github.com/franfernande/canon-climatico">github.com/franfernande/canon-climatico</a>
+        </p>
       </Slide>
     </main>
   );

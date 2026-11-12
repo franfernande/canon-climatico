@@ -199,7 +199,7 @@ web/data/fuji.json                lo que muestra la página, generado por export
 web/public/datos/                 copia del JSON de cada liquidación, para bajarlo y comprobar el hash
 web/app/(flujo)/                  pantallas con wallet: crear, depositar y cobrar
 web/components/flujo/             conexión a la wallet, lectura de la cadena y las cuatro pantallas
-web/app/deck/                     el pitch en 7 slides, con los mismos datos de la página
+web/app/deck/                     el pitch: portada y 5 slides
 entrega/canon-climatico-pitch.pdf el pitch en PDF, impreso desde /deck
 entrega/verificacion/             metadata del compilador, para verificar el código en el explorer
 entrega/guion-video.md            guion del video, con las pantallas con wallet y la preparación de la PC
@@ -282,7 +282,7 @@ En esta versión de prueba las direcciones del dueño, el arrendatario y el rela
 
 Antes de abrir la wallet, cada operación se simula contra la cadena; si el contrato la rechazaría, la pantalla explica por qué y no pide la firma.
 
-En `/deck` está el pitch en 7 slides de 1280 × 720, armado con los mismos datos y componentes. Para el PDF, con la página andando (`npm run build` y `npx next start -p 3210` dentro de `web/`), imprimila con Edge sin abrir ventana:
+En `/deck` está el pitch: una portada y 5 slides de 1280 × 720 (problema, solución, cómo funciona, por qué blockchain y modelo). Las evidencias se muestran en la demo, no en las slides. Para el PDF, con la página andando (`npm run build` y `npx next start -p 3210` dentro de `web/`), imprimila con Edge sin abrir ventana:
 
 ```
 & "C:\Program Files (x86)\Microsoft\Edge\Application\msedge.exe" --headless=new --no-pdf-header-footer --user-data-dir="$env:TEMP\edge-deck-$(Get-Date -Format HHmmss)" --print-to-pdf="$PWD\..\entrega\canon-climatico-pitch.pdf" http://localhost:3210/deck

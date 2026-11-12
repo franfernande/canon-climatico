@@ -29,7 +29,7 @@ Escrow de saldo de alquiler rural en Avalanche Fuji. El arrendatario deposita el
 | Deploy + liquidación en Fuji | **Hecho** (commit `3c2e55a`) |
 | Código verificado en el explorer | **Falta subirlo** (ver «Verificación del código») |
 | Video 1–3 min | **Falta**. Se liquida el #3 en vivo durante la grabación |
-| Pitch deck 5–7 slides | **Listo (v1)**: ruta `/deck` de `web/` → `entrega/canon-climatico-pitch.pdf`. Regenerarlo después de liquidar el #3 |
+| Pitch deck 5–7 slides | **Listo**: portada + 5 slides (problema, solución, cómo funciona, por qué blockchain, modelo) en `/deck` de `web/` → `entrega/canon-climatico-pitch.pdf`. Sin evidencias ni próximos pasos: eso va en la demo del video |
 | Carga en Hacki | **Falta** |
 | Repo público / acceso jurado | Repo **privado**; hay que dar acceso o abrirlo al entregar |
 | Deploy en Vercel | **No obligatorio**. Solo aparece como tip en la skill `frontend` de skills-track. Los entregables oficiales no lo piden |
@@ -122,7 +122,7 @@ web/                           demo estática
 web/app/(flujo)/               pantallas con wallet (1 wallets, 2 crear, 3 depositar, 4 cobrar)
 web/components/flujo/          Wallet.tsx (EIP-6963, red Fuji, firma, roles fijos) y las pantallas
 web/lib/cadena.ts              lectura del contrato desde el navegador y errores en castellano
-web/app/deck/                  pitch de 7 slides (1280 × 720) con los datos de la web
+web/app/deck/                  pitch: portada + 5 slides (1280 × 720)
 entrega/                       PDF del pitch, guion del video y metadata para verificar el código
 docs/hackathon/                requisitos y guía capturados del track
 sample-data/                   respuestas NASA (tratar como binary; ver .gitattributes)
