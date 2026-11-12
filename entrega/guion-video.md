@@ -11,7 +11,7 @@ El video junta el pitch (slides del deck) y la demo en vivo en Fuji. La demo rec
 
 ## Antes de grabar
 
-1. **MetaMask con las dos cuentas**, el dueño (`0x7886…634A`) y el arrendatario (`0x2649…b51e`), autorizadas en el sitio: en `/proceso`, «Cambiar de cuenta» y marcar las dos.
+1. **MetaMask con las tres cuentas**, el dueño (`0x7886…634A`), el arrendatario (`0x2649…b51e`) y el relayer (`0x9FB4…D3e2`, la clave `FUJI_PRIVATE_KEY` del `.env`), autorizadas en el sitio: en `/proceso`, «Cambiar de cuenta» y marcar las tres.
 2. **El dueño necesita AVAX para el gas.** Si en `/proceso` su saldo dice 0, mandale 0,05 AVAX desde el arrendatario en MetaMask.
 3. **Ensayo con el #4**, que está depositado: en `/alquiler/4`, apretar «Liquidar con la lluvia de NASA POWER».
 4. **Dejar en cero lo pendiente de cobro:** en `/cobrar`, retirar con el arrendatario y después con el dueño. Así «Cobrar» muestra solo lo del alquiler nuevo.
@@ -30,7 +30,7 @@ El alquiler nuevo va a ser el **#5** si nadie crea otro antes; si sale otro núm
 | 0:46–0:56 | **Demo · pantalla 1, «1. Wallets»** (`/proceso`). Señalar la barra con los cuatro pasos y la tabla de las tres wallets. «Conectar MetaMask» con la cuenta **dueño**: la fila del dueño queda marcada | «La demo sigue los cuatro pasos de la barra. Primero, las wallets: el dueño, el arrendatario y el relayer, cada uno con su dirección. Conecto la del dueño.» |
 | 0:56–1:12 | **Pantalla 2, «2. Crear (dueño)»**. Mostrar lo que queda fijo y elegir campaña 2014/15 y saldo 0,01; los tramos se actualizan. «Firmar y crear el alquiler» → MetaMask → «Alquiler #5 creado» → clic en el link | «Paso dos, la pantalla del dueño: elige la campaña, el saldo y los tramos, y ve cómo se reparte. Firma, y las condiciones quedan en la cadena: ya nadie las puede cambiar. Le queda un link para el arrendatario.» |
 | 1:12–1:28 | **Pantalla 3, «3. Depositar (arrendatario)»** (`/alquiler/5`). En MetaMask, cambiar a la cuenta **arrendatario** (que se vea). Recorrer las condiciones y la línea «Liquidación». «Depositar 0,01 AVAX y aceptar» → MetaMask → «Depositado» | «Paso tres, la pantalla del arrendatario: abre el link con su wallet y ve las condiciones leídas del contrato, con los plazos. Deposita, y la plata queda en el contrato, no en manos del dueño.» |
-| 1:28–1:50 | Misma pantalla: señalar el texto de los plazos y apretar «Liquidar con la lluvia de NASA POWER». Aparece la salida del relayer y la pantalla pasa a «Liquidado»: 287,0 mm, tramo medio. Clic en «ver la transacción en el explorer» | «Cuando termina la ventana, el relayer publica la lluvia: en producción corre solo, y si no lo hiciera, a los 60 días cualquiera puede reembolsar. Lo disparamos con este botón: 287 milímetros, tramo medio. El contrato anota 80 % para el dueño y 20 % para el arrendatario, con el hash del dato de NASA en la cadena.» |
+| 1:28–1:50 | Misma pantalla: señalar el texto de los plazos. En MetaMask, cambiar a la cuenta **relayer** (que se vea). Apretar «Liquidar con la lluvia de NASA POWER»: aparecen los valores de NASA, la suma y el SHA-256; confirmar en MetaMask. La pantalla pasa a «Liquidado»: 287,0 mm, tramo medio. Clic en «ver la transacción en el explorer» | «Cuando termina la ventana, el relayer publica la lluvia: en producción corre solo, y si no lo hiciera, a los 60 días cualquiera puede reembolsar. Acá firma desde su wallet: pide el dato a NASA POWER, calcula el hash y lo publica. 287 milímetros, tramo medio: el contrato anota 80 % para el dueño y 20 % para el arrendatario.» |
 | 1:50–2:05 | **Pantalla 4, «4. Cobrar»**. Con el arrendatario, «Retirar 0,002 AVAX». Cambiar a dueño en MetaMask, «Retirar 0,008 AVAX» (en la edición, este segundo retiro puede ir acelerado) | «Paso cuatro, cobrar: cada uno retira lo suyo desde su wallet, sin pedirle nada al otro, y cada transacción queda en el explorer de Avalanche.» |
 | 2:05–2:30 | **Slide 4**, por qué blockchain | «¿Por qué blockchain? Dueño y arrendatario desconfían entre sí. Con una cláusula en papel, el ajuste se negocia después; acá la regla y la plata están desde la firma. ¿Y si el relayer miente? El hash del dato queda publicado: cualquiera lo verifica sin claves, y la mentira queda firmada.» |
 | 2:30–2:47 | **Slide 5**, modelo de negocio | «Paga el arrendatario, con una comisión por contrato, porque es quien compra la protección. Llegamos por los corredores rurales que ya redactan estos contratos. El dato es gratis; el costo es el gas.» |
@@ -42,7 +42,7 @@ Si el video se pasa de 3 minutos, primero acortá las esperas de la demo; despu�
 
 - **MetaMask no muestra la cuenta que corresponde:** «Cambiar de cuenta», en la barra de arriba, vuelve a abrir el selector.
 - **«No alcanza el AVAX» o «insufficient funds»:** mandar AVAX a esa cuenta desde la otra, o bajar el saldo del alquiler.
-- **El botón dice que falta el `.env`:** la página no se está sirviendo desde la carpeta del repo que tiene las claves.
+- **El botón de liquidar está desactivado:** la cuenta conectada no es la del relayer (`0x9FB4…D3e2`); cambiala en MetaMask.
 - **Un alquiler se liquida una sola vez.** Si la toma falla después de liquidar, se crea otro desde «Crear» y se repite. Antes de repetir «Cobrar», dejar lo pendiente en cero.
 - Si el relayer se corre en la terminal, siempre con `$env:IDS="5"`: sin esa variable liquida todos los alquileres depositados.
 - Respaldo: los alquileres #1, #2 y #3 ya están liquidados y se ven en el explorer.
@@ -62,4 +62,4 @@ Después regenerar el PDF del deck (README, sección «La página») y subir el 
 
 ## Grabar desde otra PC
 
-Clonar el repo, `npm install` en `web` y en la raíz, y copiar el `.env` con las tres claves (en persona, nunca por el repo ni por un grupo). Sin `.env` funciona todo menos el botón del relayer: en ese caso lo corre quien tenga las claves, con `$env:IDS="5"; npm run relayer:fuji`, y la pantalla se actualiza sola.
+Alcanza con abrir la versión publicada en Vercel (o clonar el repo y correr `npm run dev` en `web`) y tener las tres cuentas importadas en MetaMask. Las claves se pasan en persona, nunca por el repo ni por un grupo. En la versión publicada, el JSON de NASA no se guarda en el repo: después de liquidar, descargalo con el botón «Descargar el JSON de NASA» y subilo a `sample-data/fuji/<contrato>/<id>.json` para que `npm run verificar` lo encuentre.

@@ -30,6 +30,59 @@ export function nombreDeCampania(anio: number): string {
   return `${anio}/${String((anio + 1) % 100).padStart(2, "0")}`;
 }
 
+// Lo mismo que scripts/lib/power.ts, para que el relayer pueda liquidar desde el navegador.
+const PARAMETRO = "PRECTOTCORR_SUM";
+
+/** Meses (`AAAAMM`) que cubre la ventana [inicio, fin), que empieza y termina el día 1 de un mes. */
+export function mesesDeVentana(inicio: number, fin: number): string[] {
+  const meses: string[] = [];
+  const desde = new Date((inicio + OFFSET_ARGENTINA_S) * 1000);
+  let anio = desde.getUTCFullYear();
+  let mes = desde.getUTCMonth() + 1;
+  while (inicioDeMes(anio, mes) < fin) {
+    meses.push(`${anio}${String(mes).padStart(2, "0")}`);
+    mes++;
+    if (mes === 13) {
+      mes = 1;
+      anio++;
+    }
+  }
+  return meses;
+}
+
+export function urlParaVentana(latitudE4: number, longitudE4: number, meses: string[]): string {
+  return (
+    "https://power.larc.nasa.gov/api/temporal/monthly/point" +
+    `?parameters=${PARAMETRO}&community=AG&longitude=${longitudE4 / 10_000}&latitude=${latitudE4 / 10_000}` +
+    `&start=${meses[0].slice(0, 4)}&end=${meses[meses.length - 1].slice(0, 4)}&format=JSON`
+  );
+}
+
+export function lluviaPorMes(respuesta: unknown, meses: string[]): Record<string, number> {
+  const r = respuesta as { header?: { fill_value?: number }; properties?: { parameter?: Record<string, Record<string, number>> } };
+  const serie = r.properties?.parameter?.[PARAMETRO];
+  if (!serie) throw new Error(`La respuesta de NASA POWER no trae ${PARAMETRO}.`);
+  const relleno = r.header?.fill_value ?? -999;
+  return Object.fromEntries(
+    meses.map((mes) => {
+      const v = serie[mes];
+      if (typeof v !== "number" || v === relleno || v < 0) throw new Error(`NASA POWER no tiene dato para ${mes}.`);
+      return [mes, v];
+    }),
+  );
+}
+
+/** Suma en centésimas enteras y redondea a décimas de milímetro, con los medios hacia arriba. */
+export function lluviaDecimasMm(valores: Record<string, number>): number {
+  const centesimas = Object.values(valores).reduce((total, v) => total + Math.round(v * 100), 0);
+  return Math.floor((centesimas + 5) / 10);
+}
+
+export async function sha256(bytes: Uint8Array): Promise<string> {
+  const digest = new Uint8Array(await crypto.subtle.digest("SHA-256", bytes as BufferSource));
+  return `0x${Array.from(digest, (b) => b.toString(16).padStart(2, "0")).join("")}`;
+}
+
 export function campaniaDeVentana(inicio: number): string {
   return nombreDeCampania(new Date((inicio + OFFSET_ARGENTINA_S) * 1000).getUTCFullYear());
 }

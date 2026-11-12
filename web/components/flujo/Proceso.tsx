@@ -38,7 +38,7 @@ export function Proceso() {
   const wallets = [
     { rol: "Dueño", direccion: config.cuentas.dueno, hace: "Crea el alquiler con las condiciones y cobra su parte." },
     { rol: "Arrendatario", direccion: config.cuentas.arrendatario, hace: "Lee las condiciones, deposita el saldo y cobra su parte." },
-    { rol: "Relayer", direccion: config.cuentas.relayer, hace: "Publica la lluvia de NASA POWER. Corre en la terminal, sin pantalla." },
+    { rol: "Relayer", direccion: config.cuentas.relayer, hace: "Publica la lluvia de NASA POWER al cerrar la ventana. En la demo firma desde su wallet." },
   ];
 
   return (

@@ -31,7 +31,7 @@ export default function LayoutFlujo({ children }: { children: ReactNode }) {
         abi: datos.contrato.abi,
         explorer: datos.explorer,
         modoDemo: Boolean(datos.contrato.modoDemo),
-        relayerDesdeWeb: process.env.NODE_ENV !== "production" || process.env.RELAYER_DESDE_WEB === "1",
+        guardaEnRepo: process.env.NODE_ENV !== "production",
         fuente: datos.fuente,
         punto: datos.punto,
         cuentas,
