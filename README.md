@@ -9,6 +9,8 @@ Categoría principal: RWA (activos del mundo real), cruzada con Geoespacial.
 
 > Estado: idea validada y diseño cerrado. El código se escribe el jueves 12.
 
+Requisitos, pautas y recursos del track, tal como los publicó la organización: [docs/hackathon/](docs/hackathon/README.md).
+
 ## El problema
 
 En Anta, al este de Salta, la soja y el poroto se siembran a secano. La forma más común de alquilar un lote es un valor fijo por hectárea expresado en quintales de soja. El dueño suele pedir un anticipo, alrededor del 50 %, al firmar o antes de la siembra. El saldo se paga en la cosecha, entre mayo y julio. Si hay sequía, el arrendatario paga igual.
@@ -185,6 +187,8 @@ web/                              página de la demo
 - **Viernes 13, antes de las 9:00:** video final, deck y carga en Hacki. La guía del track cuenta hasta las 9:00 y Hacki cierra a las 10:00.
 
 ## Entregables del track
+
+La lista completa y la checklist de la guía están en [docs/hackathon/01-requisitos.md](docs/hackathon/01-requisitos.md).
 
 - [ ] Contrato desplegado en Fuji, con link al explorer
 - [ ] Video demo de 1 a 3 minutos, con una acción on-chain
