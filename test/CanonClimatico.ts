@@ -14,7 +14,8 @@ const { ethers, networkHelpers } = await network.create();
 
 const SALDO = ethers.parseEther("1");
 const UN_DIA = 24 * 3600;
-const ESTADO = { Creado: 0n, Depositado: 1n, Liquidado: 2n, Cancelado: 3n };
+const ESTADO = { Creado: 0n, Depositado: 1n, Liquidado: 2n, Cancelado: 3n, Reembolsado: 4n };
+const PLAZO_LIQUIDACION = 60 * UN_DIA;
 
 const archivo = readFileSync("sample-data/nasa-power-anta-2004-2025.json");
 const historia: unknown = JSON.parse(archivo.toString("utf8"));
@@ -45,10 +46,28 @@ async function condiciones(arrendatario: string, relayer: string, anio = 2024) {
   };
 }
 
+// Los tests usan campañas pasadas, así que el contrato se despliega en modo demo.
 async function desplegado() {
   const [dueno, arrendatario, relayer, otro] = await ethers.getSigners();
-  const canon = await ethers.deployContract("CanonClimatico");
+  const canon = await ethers.deployContract("CanonClimatico", [true]);
   return { canon, dueno, arrendatario, relayer, otro };
+}
+
+async function desplegadoEnProduccion() {
+  const [dueno, arrendatario, relayer] = await ethers.getSigners();
+  const canon = await ethers.deployContract("CanonClimatico", [false]);
+  return { canon, dueno, arrendatario, relayer };
+}
+
+/** Un contrato de una campaña futura, depositado: la ventana todavía no cerró. */
+async function depositadoCampaniaFutura() {
+  const f = await desplegado();
+  const ahora = await networkHelpers.time.latest();
+  const proximaCampania = new Date(ahora * 1000).getUTCFullYear() + 1;
+  const c = await condiciones(f.arrendatario.address, f.relayer.address, proximaCampania);
+  await f.canon.connect(f.dueno).crear(c);
+  await f.canon.connect(f.arrendatario).depositar(1, { value: SALDO });
+  return { ...f, c };
 }
 
 async function creado() {
@@ -92,6 +111,8 @@ describe("CanonClimatico", function () {
         [{ arrendatario: ethers.ZeroAddress }, "arrendatario"],
         [{ arrendatario: dueno.address }, "arrendatario"],
         [{ relayer: ethers.ZeroAddress }, "relayer"],
+        [{ relayer: dueno.address }, "relayer"],
+        [{ relayer: arrendatario.address }, "relayer"],
         [{ saldo: 0n }, "saldo"],
         [{ finVentana: base.inicioVentana }, "ventana"],
         [{ plazoDeposito: ahora }, "plazo"],
@@ -155,10 +176,18 @@ describe("CanonClimatico", function () {
 
       const tx = canon.connect(relayer).liquidar(1, lluvia, HASH);
       await expect(tx).to.emit(canon, "Liquidado").withArgs(1n, lluvia, HASH, SALDO / 2n, SALDO / 2n);
-      await expect(tx).to.changeEtherBalances(
+      // Liquidar solo anota: la plata sigue en el contrato hasta que cada uno la retira.
+      await expect(tx).to.changeEtherBalances(ethers, [dueno, arrendatario, canon], [0n, 0n, 0n]);
+      expect(await canon.pendiente(dueno.address)).to.equal(SALDO / 2n);
+      expect(await canon.pendiente(arrendatario.address)).to.equal(SALDO / 2n);
+
+      await expect(canon.connect(dueno).retirar())
+        .to.emit(canon, "Retirado")
+        .withArgs(dueno.address, SALDO / 2n);
+      await expect(canon.connect(arrendatario).retirar()).to.changeEtherBalances(
         ethers,
-        [dueno, arrendatario, canon],
-        [SALDO / 2n, SALDO / 2n, -SALDO],
+        [arrendatario, canon],
+        [SALDO / 2n, -(SALDO / 2n)],
       );
 
       const a = await canon.alquiler(1);
@@ -171,22 +200,18 @@ describe("CanonClimatico", function () {
       const { canon, dueno, arrendatario, relayer } = await networkHelpers.loadFixture(depositado);
       expect(lluviaDe(2023)).to.equal(3236);
 
-      await expect(canon.connect(relayer).liquidar(1, lluviaDe(2023), HASH)).to.changeEtherBalances(
-        ethers,
-        [dueno, arrendatario],
-        [SALDO, 0n],
-      );
+      await canon.connect(relayer).liquidar(1, lluviaDe(2023), HASH);
+      expect(await canon.pendiente(dueno.address)).to.equal(SALDO);
+      expect(await canon.pendiente(arrendatario.address)).to.equal(0n);
     });
 
     it("2014/15: 287,0 mm, 80 % al dueño y 20 % al arrendatario", async function () {
       const { canon, dueno, arrendatario, relayer } = await networkHelpers.loadFixture(depositado);
       const alArrendatario = (SALDO * 20n) / 100n;
 
-      await expect(canon.connect(relayer).liquidar(1, lluviaDe(2014), HASH)).to.changeEtherBalances(
-        ethers,
-        [dueno, arrendatario],
-        [SALDO - alArrendatario, alArrendatario],
-      );
+      await canon.connect(relayer).liquidar(1, lluviaDe(2014), HASH);
+      expect(await canon.pendiente(dueno.address)).to.equal(SALDO - alArrendatario);
+      expect(await canon.pendiente(arrendatario.address)).to.equal(alArrendatario);
     });
 
     it("2022/23 queda en el tramo bajo por 0,6 mm", async function () {
@@ -251,12 +276,7 @@ describe("CanonClimatico", function () {
     });
 
     it("no liquida antes de que cierre la ventana", async function () {
-      const { canon, dueno, arrendatario, relayer } = await networkHelpers.loadFixture(desplegado);
-      const ahora = await networkHelpers.time.latest();
-      const proximaCampania = new Date(ahora * 1000).getUTCFullYear() + 1;
-      const c = await condiciones(arrendatario.address, relayer.address, proximaCampania);
-      await canon.connect(dueno).crear(c);
-      await canon.connect(arrendatario).depositar(1, { value: SALDO });
+      const { canon, relayer, c } = await networkHelpers.loadFixture(depositadoCampaniaFutura);
 
       await expect(canon.connect(relayer).liquidar(1, 2432, HASH)).to.be.revertedWithCustomError(
         canon,
@@ -265,6 +285,104 @@ describe("CanonClimatico", function () {
 
       await networkHelpers.time.increaseTo(c.finVentana);
       await expect(canon.connect(relayer).liquidar(1, 2432, HASH)).to.emit(canon, "Liquidado");
+    });
+  });
+
+  describe("modo demo", function () {
+    it("fuera del modo demo no se puede depositar después de que empieza la ventana", async function () {
+      const { canon, dueno, arrendatario, relayer } = await networkHelpers.loadFixture(desplegadoEnProduccion);
+      expect(await canon.modoDemo()).to.equal(false);
+
+      const ahora = await networkHelpers.time.latest();
+      const proximaCampania = new Date(ahora * 1000).getUTCFullYear() + 1;
+      const c = await condiciones(arrendatario.address, relayer.address, proximaCampania);
+
+      await expect(canon.connect(dueno).crear({ ...c, plazoDeposito: c.inicioVentana + 1 }))
+        .to.be.revertedWithCustomError(canon, "CondicionesInvalidas")
+        .withArgs("plazo despues del inicio");
+      await expect(canon.connect(dueno).crear({ ...c, plazoDeposito: c.inicioVentana })).to.emit(canon, "Creado");
+    });
+
+    it("en modo demo acepta campañas pasadas", async function () {
+      const { canon } = await networkHelpers.loadFixture(creado);
+      expect(await canon.modoDemo()).to.equal(true);
+      expect((await canon.alquiler(1)).estado).to.equal(ESTADO.Creado);
+    });
+  });
+
+  describe("retirar", function () {
+    it("no se puede retirar dos veces", async function () {
+      const { canon, dueno, relayer } = await networkHelpers.loadFixture(depositado);
+      await canon.connect(relayer).liquidar(1, lluviaDe(2024), HASH);
+      await canon.connect(dueno).retirar();
+      expect(await canon.pendiente(dueno.address)).to.equal(0n);
+      await expect(canon.connect(dueno).retirar()).to.be.revertedWithCustomError(canon, "NadaParaRetirar");
+    });
+
+    it("un dueño que rechaza pagos no traba el cobro del arrendatario", async function () {
+      const { canon, arrendatario, relayer } = await networkHelpers.loadFixture(desplegado);
+      const duenoContrato = await ethers.deployContract("RechazaPagos");
+      const c = await condiciones(arrendatario.address, relayer.address);
+      await duenoContrato.crear(await canon.getAddress(), c);
+      await canon.connect(arrendatario).depositar(1, { value: SALDO });
+
+      // Año seco: la liquidación funciona aunque el dueño no pueda recibir plata.
+      await expect(canon.connect(relayer).liquidar(1, lluviaDe(2024), HASH)).to.emit(canon, "Liquidado");
+      await expect(canon.connect(arrendatario).retirar()).to.changeEtherBalances(
+        ethers,
+        [arrendatario],
+        [SALDO / 2n],
+      );
+
+      // El único perjudicado es el dueño, y su parte sigue anotada.
+      await expect(duenoContrato.retirar(await canon.getAddress())).to.be.revertedWithCustomError(
+        canon,
+        "TransferenciaFallida",
+      );
+      expect(await canon.pendiente(await duenoContrato.getAddress())).to.equal(SALDO / 2n);
+    });
+  });
+
+  describe("reembolsar", function () {
+    it("si nadie liquida en 60 días, cualquiera reparte según el tramo medio", async function () {
+      const { canon, dueno, arrendatario, relayer, otro, c } =
+        await networkHelpers.loadFixture(depositadoCampaniaFutura);
+
+      await networkHelpers.time.increaseTo(c.finVentana + PLAZO_LIQUIDACION - 10);
+      await expect(canon.connect(otro).reembolsar(1)).to.be.revertedWithCustomError(
+        canon,
+        "PlazoLiquidacionVigente",
+      );
+
+      await networkHelpers.time.increaseTo(c.finVentana + PLAZO_LIQUIDACION);
+      const alArrendatario = (SALDO * 20n) / 100n;
+      await expect(canon.connect(otro).reembolsar(1))
+        .to.emit(canon, "Reembolsado")
+        .withArgs(1n, SALDO - alArrendatario, alArrendatario);
+
+      expect((await canon.alquiler(1)).estado).to.equal(ESTADO.Reembolsado);
+      expect(await canon.pendiente(dueno.address)).to.equal(SALDO - alArrendatario);
+      expect(await canon.pendiente(arrendatario.address)).to.equal(alArrendatario);
+
+      // Después del reembolso el relayer ya no puede liquidar.
+      await expect(canon.connect(relayer).liquidar(1, 2432, HASH))
+        .to.be.revertedWithCustomError(canon, "EstadoInvalido")
+        .withArgs(ESTADO.Reembolsado);
+    });
+
+    it("no reembolsa un contrato ya liquidado", async function () {
+      const { canon, relayer, otro } = await networkHelpers.loadFixture(depositado);
+      await canon.connect(relayer).liquidar(1, 2432, HASH);
+      await expect(canon.connect(otro).reembolsar(1))
+        .to.be.revertedWithCustomError(canon, "EstadoInvalido")
+        .withArgs(ESTADO.Liquidado);
+    });
+
+    it("no reembolsa un contrato sin depósito", async function () {
+      const { canon, otro } = await networkHelpers.loadFixture(creado);
+      await expect(canon.connect(otro).reembolsar(1))
+        .to.be.revertedWithCustomError(canon, "EstadoInvalido")
+        .withArgs(ESTADO.Creado);
     });
   });
 

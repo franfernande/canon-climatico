@@ -17,7 +17,7 @@ import {
   ventanaDeCampania,
 } from "./lib/power.ts";
 
-const ESTADOS = ["Creado", "Depositado", "Liquidado", "Cancelado"] as const;
+const ESTADOS = ["Creado", "Depositado", "Liquidado", "Cancelado", "Reembolsado"] as const;
 const UMBRALES_EJEMPLO = { bajo: 2550, alto: 3050 };
 const OFFSET_ARGENTINA_S = -3 * 3600;
 
@@ -45,6 +45,7 @@ if (existsSync(rutaDespliegue(red))) {
   const d = leerDespliegue(red);
   const canon = new Contract(d.direccion, d.abi, new JsonRpcProvider(REDES[red].rpc));
   contrato = {
+    modoDemo: Boolean(await canon.getFunction("modoDemo")()),
     direccion: d.direccion,
     link: linkDireccion(red, d.direccion),
     linkDespliegue: linkTx(red, d.txDespliegue),
@@ -60,8 +61,12 @@ if (existsSync(rutaDespliegue(red))) {
     const anioCampania = new Date((Number(c.inicioVentana) + OFFSET_ARGENTINA_S) * 1000).getUTCFullYear();
 
     let reparto: AlquilerWeb["reparto"] = null;
-    if (estado === "Liquidado") {
-      const pct: bigint = await canon.getFunction("porcentajeArrendatario")(id, a.lluviaDecimasMm);
+    if (estado === "Liquidado" || estado === "Reembolsado") {
+      // Un reembolso reparte según el tramo medio, sin lluvia publicada.
+      const pct: bigint =
+        estado === "Reembolsado"
+          ? BigInt(c.pctMedio)
+          : await canon.getFunction("porcentajeArrendatario")(id, a.lluviaDecimasMm);
       const alArrendatario = (c.saldo * pct) / 100n;
       reparto = {
         pctArrendatario: Number(pct),

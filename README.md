@@ -121,20 +121,26 @@ Cada contrato de alquiler guarda:
 - el plazo para depositar;
 - los dos umbrales, en décimas de milímetro (255 mm se guarda como `2550`);
 - el porcentaje que vuelve al arrendatario en el tramo medio y en el tramo bajo (en el tramo alto no vuelve nada);
-- el estado: creado, depositado, liquidado o cancelado.
+- el estado: creado, depositado, liquidado, cancelado o reembolsado.
+
+El relayer no puede ser el dueño ni el arrendatario: quien informa la lluvia no puede ganar con el resultado.
 
 | Función | Quién la llama | Qué hace |
 | --- | --- | --- |
 | `crear(...)` | El dueño | Abre el contrato con todos los parámetros |
 | `depositar(id)` | El arrendatario | Envía exactamente el saldo antes del plazo. Con eso acepta las condiciones |
-| `liquidar(id, lluviaDecimasMm, hashDato)` | El relayer | Solo después del fin de la ventana y una única vez. Calcula el tramo y transfiere a cada parte |
+| `liquidar(id, lluviaDecimasMm, hashDato)` | El relayer | Solo después del fin de la ventana y una única vez. Calcula el tramo y anota lo que le toca a cada parte |
+| `retirar()` | El dueño o el arrendatario | Cobra lo que tiene anotado |
+| `reembolsar(id)` | Cualquiera | Si a los 60 días del fin de la ventana nadie liquidó, reparte el saldo según el tramo medio |
 | `cancelar(id)` | El dueño | Si el plazo venció sin depósito, cierra el contrato |
 
-Eventos: `Creado`, `Depositado`, `Liquidado(id, lluvia, hashDato, alDueno, alArrendatario)` y `Cancelado`.
+Eventos: `Creado`, `Depositado`, `Liquidado(id, lluvia, hashDato, alDueno, alArrendatario)`, `Retirado`, `Reembolsado` y `Cancelado`.
+
+Liquidar no envía la plata, solo la anota, y cada parte la cobra con `retirar()`. Así ninguna puede trabar el cobro de la otra: si el dueño fuera un contrato que rechaza pagos, el arrendatario cobra igual.
 
 En la demo se paga con AVAX de prueba. En producción se pagaría con USDC.
 
-En producción, el plazo para depositar vence antes de que empiece la ventana, para que nadie deposite sabiendo cómo vino el año. En la demo se usan campañas pasadas, así que ese plazo se configura más largo.
+El contrato se despliega con un `modoDemo` fijo, que cualquiera puede leer. Sin modo demo, el plazo para depositar tiene que vencer antes de que empiece la ventana, para que nadie deposite sabiendo cómo vino el año. El despliegue de Fuji está en modo demo porque usa campañas pasadas; con `MODO_DEMO=false` se despliega sin él. En modo demo, como los 60 días de esas campañas ya pasaron, cualquiera podría llamar a `reembolsar` antes que el relayer: en el video el relayer liquida enseguida.
 
 ## Relayer
 
@@ -202,7 +208,9 @@ npm install
 npm test
 ```
 
-Los tests usan la historia real de NASA POWER guardada en `sample-data/nasa-power-anta-2004-2025.json`. Comprueban la lluvia de las 21 campañas de la tabla, el reparto de cada tramo y los controles del contrato.
+Los tests usan la historia real de NASA POWER guardada en `sample-data/nasa-power-anta-2004-2025.json`. Comprueban la lluvia de las 21 campañas de la tabla, el reparto de cada tramo y los controles del contrato: que el relayer no sea una de las partes, que un dueño que rechaza pagos no trabe el cobro del arrendatario, que no se pueda retirar dos veces, el reembolso a los 60 días y el modo demo. Son 33 tests y pasan todos.
+
+La demo completa también se ensayó en una red local (`npx hardhat node`): despliegue, creación y depósito de 2024/25 y 2023/24, liquidación con el dato pedido en el momento a NASA POWER (243,2 mm, mitad y mitad; 323,6 mm, todo al dueño), retiro de las dos partes, verificación de los dos contratos con los tres controles en OK y exportación de los datos de la página.
 
 ### En Fuji
 
@@ -223,14 +231,20 @@ Los tests usan la historia real de NASA POWER guardada en `sample-data/nasa-powe
    ```
 
    Hardhat las carga con `dotenv`. También sirven como variables de entorno del sistema con esos mismos nombres.
-4. Desplegá, creá los dos contratos de la demo, liquidalos y verificá:
+4. Desplegá, creá los dos contratos de la demo, liquidalos, cobrá y verificá. El orden importa: liquidar solo anota lo que le toca a cada parte, y la plata llega a las cuentas recién con `retirar`, después del relayer:
 
    ```
    npm run deploy:fuji
    npm run demo:fuji
    npm run relayer:fuji
+   npm run retirar:fuji
    npm run verificar -- 1
    npm run verificar -- 2
+   ```
+5. Subí al repo lo que generaron los scripts, para que cualquiera pueda correr el verificador:
+
+   ```
+   git add deployments/fuji.json sample-data/fuji/
    ```
 
 Cada script imprime los links al explorer. La dirección, el ABI y las transacciones quedan en `deployments/fuji.json`, y la respuesta de NASA POWER que usó el relayer, en `sample-data/fuji/<contrato>/<id>.json`. Si NASA POWER no responde, el relayer puede usar una respuesta ya guardada: en PowerShell, `$env:ARCHIVO="ruta.json"; npm run relayer:fuji`. Con `$env:IDS="1"` liquida solo ese contrato.
@@ -273,7 +287,7 @@ La lista completa y la checklist de la guía están en [docs/hackathon/01-requis
 - Sumar una segunda fuente de lluvia, o varios relayers, con mediana y plazo de disputa.
 - Medir la superficie efectivamente sembrada con Sentinel-2, como plantea la cláusula de CREA.
 - Pagar en USDC.
-- Si a los 30 días del cierre no hay dato, liquidar con un reparto por defecto acordado al firmar.
+- Que el reparto cuando el relayer no liquida (hoy, el tramo medio a los 60 días) lo acuerden las partes al firmar.
 
 ## Supuestos y límites
 

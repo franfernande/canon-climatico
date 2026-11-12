@@ -19,9 +19,11 @@ export type Despliegue = {
   direccion: string;
   txDespliegue: string;
   bloque: number;
+  modoDemo?: boolean;
   abi: JsonFragment[];
   alquileres: { id: number; campania: string; txCrear: string; txDepositar: string }[];
   liquidaciones: { id: number; tx: string; lluviaDecimasMm: number; hashDato: string; archivo: string }[];
+  retiros?: { rol: "dueño" | "arrendatario"; cuenta: string; montoWei: string; tx: string }[];
 };
 
 export function rutaDespliegue(red: string): string {
