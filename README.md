@@ -202,6 +202,7 @@ web/components/flujo/             conexión a la wallet, lectura de la cadena y 
 web/app/deck/                     el pitch en 7 slides, con los mismos datos de la página
 entrega/canon-climatico-pitch.pdf el pitch en PDF, impreso desde /deck
 entrega/verificacion/             metadata del compilador, para verificar el código en el explorer
+entrega/guion-video.md            guion del video, con las pantallas con wallet y la preparación de la PC
 ```
 
 ## Cómo correrlo

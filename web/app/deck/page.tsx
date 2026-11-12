@@ -151,18 +151,22 @@ export default function Deck() {
           <li>
             <code>crear</code>
             <span>El dueño fija el punto, la ventana, los umbrales y el reparto.</span>
+            <span className={s.donde}>Pantalla del dueño, con su wallet</span>
           </li>
           <li>
             <code>depositar</code>
             <span>El arrendatario pone el saldo y con eso acepta.</span>
+            <span className={s.donde}>Pantalla del arrendatario, con su wallet</span>
           </li>
           <li>
             <code>liquidar</code>
             <span>El relayer publica la lluvia y el hash del dato.</span>
+            <span className={s.donde}>Script del relayer, sin pantalla</span>
           </li>
           <li>
             <code>retirar</code>
             <span>Cada parte cobra lo que tiene anotado.</span>
+            <span className={s.donde}>Pantalla de cobro, cada uno con su wallet</span>
           </li>
         </ol>
         <p className={s.nota}>
@@ -213,17 +217,41 @@ export default function Deck() {
 
       <Slide n={5}>
         <p className={s.marca}>Demo en Avalanche Fuji</p>
-        <h2 className={s.titulo}>{liquidados} contratos liquidados en Fuji</h2>
+        <h2 className={s.titulo}>Cada parte firma desde su wallet</h2>
+        <ol className={s.pantallas}>
+          <li>
+            <strong>1. Wallets</strong>
+            <span>Se conecta Core o MetaMask, en la red Fuji.</span>
+            <span className={s.botonFalso}>Conectar MetaMask</span>
+          </li>
+          <li>
+            <strong>2. Pantalla del dueño</strong>
+            <span>Elige campaña, saldo, umbrales y porcentajes.</span>
+            <span className={s.botonFalso}>Firmar y crear el alquiler</span>
+          </li>
+          <li>
+            <strong>3. Pantalla del arrendatario</strong>
+            <span>Lee las condiciones en la cadena y las acepta.</span>
+            <span className={s.botonFalso}>Depositar y aceptar</span>
+          </li>
+          <li>
+            <strong>4. Pantalla de cobro</strong>
+            <span>Después del relayer, cada uno retira lo suyo.</span>
+            <span className={s.botonFalso}>Retirar</span>
+          </li>
+        </ol>
         {contrato && (
           <p className={s.contrato}>
-            Contrato <a href={contrato.link}>{contrato.direccion}</a> en Fuji C-Chain
-            {contrato.modoDemo && ", en modo demo para poder usar campañas pasadas"}.
+            {liquidados} contratos liquidados en el contrato <a href={contrato.link}>{contrato.direccion}</a>, con la
+            lluvia real de NASA POWER:
           </p>
         )}
         <div className={s.tarjetas}>
-          {alquileres.map((a) => (
-            <TarjetaAlquiler key={a.id} a={a} />
-          ))}
+          {alquileres
+            .filter((a) => a.estado === "Liquidado")
+            .map((a) => (
+              <TarjetaAlquiler key={a.id} a={a} />
+            ))}
         </div>
         <p className={s.nota}>
           Cualquiera lo comprueba sin claves con <code>npm run verificar -- 1</code>: el hash, los valores y la suma.
@@ -300,6 +328,7 @@ export default function Deck() {
               <li>Expresar el saldo en quintales de soja, con el precio pizarra.</li>
               <li>Una segunda fuente de lluvia o varios relayers, con mediana y plazo de disputa.</li>
               <li>Medir la superficie sembrada con Sentinel-2, como plantea la cláusula de CREA.</li>
+              <li>Que el dueño cargue la wallet del arrendatario y cada parte use la suya.</li>
               <li>Pagar en USDC.</li>
             </ul>
           </div>
@@ -309,7 +338,7 @@ export default function Deck() {
               <li>Es un índice, no una medición del lote: la grilla de NASA POWER es de 0,5° × 0,625°.</li>
               <li>La ventana de diciembre y enero hay que confirmarla con productores.</li>
               <li>Que las partes acepten una stablecoin es un supuesto.</li>
-              <li>En el MVP hay un solo relayer.</li>
+              <li>En el MVP hay un solo relayer, y las wallets de la demo son fijas.</li>
             </ul>
           </div>
         </div>

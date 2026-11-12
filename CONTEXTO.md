@@ -122,7 +122,7 @@ web/app/(flujo)/               pantallas con wallet (1 wallets, 2 crear, 3 depos
 web/components/flujo/          Wallet.tsx (EIP-6963, red Fuji, firma, roles fijos) y las pantallas
 web/lib/cadena.ts              lectura del contrato desde el navegador y errores en castellano
 web/app/deck/                  pitch de 7 slides (1280 × 720) con los datos de la web
-entrega/                       PDF del pitch y metadata para verificar el código
+entrega/                       PDF del pitch, guion del video y metadata para verificar el código
 docs/hackathon/                requisitos y guía capturados del track
 sample-data/                   respuestas NASA (tratar como binary; ver .gitattributes)
 ```
@@ -152,7 +152,8 @@ Vercel u otro host de la web: opcional, solo si conviene mostrar la demo en el c
 - No reescribir el contrato ni redeployar en Fuji salvo bug bloqueante o pedido explícito (ya hay txs de demo en el explorer).
 - No asumir que Vercel / Oracle Cloud / L1 propia son obligatorios: confirmar contra `docs/hackathon/01-requisitos.md`.
 - No convertir EOL de JSON en `sample-data/` (rompe el hash on-chain).
-- No correr el relayer sobre el #3 fuera de la toma: se liquida una sola vez.
+- No correr el relayer sobre el #3 fuera de la toma: se liquida una sola vez. Correrlo siempre con `$env:IDS`: sin esa variable liquida todos los depositados.
+- Los alquileres creados desde `/crear` no quedan en `deployments/fuji.json` (eso lo escribe `demo.ts`): su tarjeta en la home sale sin los links de crear y depositar, pero con el de la liquidación. El guion del video está en `entrega/guion-video.md`.
 
 ## Trampas conocidas (Windows)
 
