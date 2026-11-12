@@ -7,3 +7,8 @@ coverage/
 .env.*
 deployments/localhost.json
 sample-data/localhost/
+.next/
+next-env.d.ts
+*.tsbuildinfo
+web/data/localhost.json
+web/public/datos/localhost/

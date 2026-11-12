@@ -10,7 +10,8 @@
     "deploy:fuji": "hardhat run scripts/deploy.ts --network fuji",
     "demo:fuji": "hardhat run scripts/demo.ts --network fuji",
     "relayer:fuji": "hardhat run scripts/relayer.ts --network fuji",
-    "verificar": "node scripts/verificar.ts"
+    "verificar": "node scripts/verificar.ts",
+    "web:datos": "node scripts/exportar-web.ts"
   },
   "overrides": {
     "zod": "4.6.7",

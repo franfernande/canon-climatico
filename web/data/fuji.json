@@ -1,0 +1,123 @@
+{
+  "red": "fuji",
+  "generado": "2026-11-12T14:26:45.595Z",
+  "explorer": "https://explorer-test.avax.network/c-chain",
+  "fuente": "NASA POWER PRECTOTCORR_SUM",
+  "punto": {
+    "latitud": -25.12,
+    "longitud": -64.13
+  },
+  "umbrales": {
+    "bajo": 2550,
+    "alto": 3050
+  },
+  "historia": [
+    {
+      "anio": 2004,
+      "campania": "2004/05",
+      "lluviaDecimasMm": 2402
+    },
+    {
+      "anio": 2005,
+      "campania": "2005/06",
+      "lluviaDecimasMm": 3359
+    },
+    {
+      "anio": 2006,
+      "campania": "2006/07",
+      "lluviaDecimasMm": 4193
+    },
+    {
+      "anio": 2007,
+      "campania": "2007/08",
+      "lluviaDecimasMm": 3934
+    },
+    {
+      "anio": 2008,
+      "campania": "2008/09",
+      "lluviaDecimasMm": 3045
+    },
+    {
+      "anio": 2009,
+      "campania": "2009/10",
+      "lluviaDecimasMm": 2609
+    },
+    {
+      "anio": 2010,
+      "campania": "2010/11",
+      "lluviaDecimasMm": 3449
+    },
+    {
+      "anio": 2011,
+      "campania": "2011/12",
+      "lluviaDecimasMm": 3081
+    },
+    {
+      "anio": 2012,
+      "campania": "2012/13",
+      "lluviaDecimasMm": 2667
+    },
+    {
+      "anio": 2013,
+      "campania": "2013/14",
+      "lluviaDecimasMm": 3623
+    },
+    {
+      "anio": 2014,
+      "campania": "2014/15",
+      "lluviaDecimasMm": 2870
+    },
+    {
+      "anio": 2015,
+      "campania": "2015/16",
+      "lluviaDecimasMm": 3052
+    },
+    {
+      "anio": 2016,
+      "campania": "2016/17",
+      "lluviaDecimasMm": 2406
+    },
+    {
+      "anio": 2017,
+      "campania": "2017/18",
+      "lluviaDecimasMm": 3173
+    },
+    {
+      "anio": 2018,
+      "campania": "2018/19",
+      "lluviaDecimasMm": 3052
+    },
+    {
+      "anio": 2019,
+      "campania": "2019/20",
+      "lluviaDecimasMm": 3719
+    },
+    {
+      "anio": 2020,
+      "campania": "2020/21",
+      "lluviaDecimasMm": 2481
+    },
+    {
+      "anio": 2021,
+      "campania": "2021/22",
+      "lluviaDecimasMm": 3448
+    },
+    {
+      "anio": 2022,
+      "campania": "2022/23",
+      "lluviaDecimasMm": 2544
+    },
+    {
+      "anio": 2023,
+      "campania": "2023/24",
+      "lluviaDecimasMm": 3236
+    },
+    {
+      "anio": 2024,
+      "campania": "2024/25",
+      "lluviaDecimasMm": 2432
+    }
+  ],
+  "contrato": null,
+  "alquileres": []
+}

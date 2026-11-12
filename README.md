@@ -7,7 +7,7 @@ El arrendatario deposita el saldo del alquiler en un contrato en Avalanche al fi
 Track Blockchain de Avalanche · Hackathon Argentina Space 2026 · Salta, 11 al 13 de noviembre.
 Categoría principal: RWA (activos del mundo real), cruzada con Geoespacial.
 
-> Estado: el contrato, los tests, el relayer y el verificador están listos y probados en una red local. Falta desplegar en Fuji y hacer la página, el deck y el video.
+> Estado: el contrato, los tests, el relayer, el verificador y la página de la demo están listos y probados en una red local. Falta desplegar en Fuji, publicar la página y hacer el deck y el video.
 
 Requisitos, pautas y recursos del track, tal como los publicó la organización: [docs/hackathon/](docs/hackathon/README.md).
 
@@ -185,9 +185,12 @@ scripts/deploy.ts                 despliega y guarda la dirección y el ABI en d
 scripts/demo.ts                   crea y deposita los contratos de 2024/25 y 2023/24
 scripts/relayer.ts                NASA POWER -> sample-data -> hash -> liquidar()
 scripts/verificar.ts              compara el hash, los valores y la suma, sin claves
+scripts/exportar-web.ts           lee la cadena y arma los datos de la página
 deployments/fuji.json             dirección, ABI y transacciones en Fuji
 sample-data/                      respuestas de NASA POWER
-web/                              página de la demo (pendiente)
+web/                              página de la demo, en Next.js y estática
+web/data/fuji.json                lo que muestra la página, generado por exportar-web
+web/public/datos/                 copia del JSON de cada liquidación, para bajarlo y comprobar el hash
 ```
 
 ## Cómo correrlo
@@ -225,6 +228,21 @@ Los tests usan la historia real de NASA POWER guardada en `sample-data/nasa-powe
    ```
 
 Cada script imprime los links al explorer. La dirección, el ABI y las transacciones quedan en `deployments/fuji.json`, y la respuesta de NASA POWER que usó el relayer, en `sample-data/fuji/<contrato>/<id>.json`. Si NASA POWER no responde, el relayer puede usar una respuesta ya guardada: en PowerShell, `$env:ARCHIVO="ruta.json"; npm run relayer:fuji`. Con `$env:IDS="1"` liquida solo ese contrato.
+
+### La página
+
+La página no se conecta a ninguna wallet ni a la cadena: muestra lo que exporta `exportar-web`, así que queda estática y se publica sola. Después de cada paso en Fuji, regenerá los datos:
+
+```
+npm run web:datos
+cd web
+npm install
+npm run dev
+```
+
+Muestra la regla de los tramos, la lluvia de las 21 campañas contra los umbrales y una tarjeta por contrato, con la lluvia, el reparto, los links al explorer y el JSON de NASA POWER que usó el relayer. Antes del despliegue avisa que el contrato todavía no está en Fuji.
+
+Para probarla con un ensayo local: `npx hardhat node` en una terminal; en otra, deploy, demo y relayer con `--network localhost`, después `node scripts/exportar-web.ts localhost` y, dentro de `web/`, `$env:RED="localhost"; npm run dev`.
 
 ## Plan de trabajo
 
