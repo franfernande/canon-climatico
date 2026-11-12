@@ -3,7 +3,7 @@ import type { ReactNode } from "react";
 import "./globals.css";
 
 export const metadata: Metadata = {
-  title: "Canon Climático",
+  title: "AgroRenta",
   description: "Alquiler de campo con un saldo que se reparte según la lluvia de NASA POWER, en Avalanche.",
 };
 

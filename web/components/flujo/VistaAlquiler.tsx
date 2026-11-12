@@ -234,18 +234,30 @@ export function VistaAlquiler({ id }: { id: number }) {
                 <p className={s.nota}>Esta campaña ya cerró (el contrato está en modo demo), así que se puede liquidar ahora.</p>
               )
             )}
-            <button
-              type="button"
-              className={s.boton}
-              disabled={ventanaAbierta || relayer.fase === "corriendo"}
-              onClick={liquidar}
-            >
-              Liquidar con la lluvia de NASA POWER
-            </button>
-            <p className={s.nota}>
-              En la demo, el botón corre el relayer en la PC que sirve la página, con la clave del relayer de su{" "}
-              <code>.env</code>. Nadie más puede liquidar: el contrato solo acepta esa dirección.
-            </p>
+            {config.relayerDesdeWeb ? (
+              <>
+                <button
+                  type="button"
+                  className={s.boton}
+                  disabled={ventanaAbierta || relayer.fase === "corriendo"}
+                  onClick={liquidar}
+                >
+                  Liquidar con la lluvia de NASA POWER
+                </button>
+                <p className={s.nota}>
+                  En la demo, el botón corre el relayer en la PC que sirve la página, con la clave del relayer de su{" "}
+                  <code>.env</code>. Nadie más puede liquidar: el contrato solo acepta esa dirección.
+                </p>
+              </>
+            ) : (
+              <>
+                <p className={s.nota}>
+                  En la versión publicada, el relayer no corre desde la página: su clave no está en el servidor. Lo
+                  corre el equipo desde su PC, y esta pantalla se actualiza sola cuando llega la liquidación:
+                </p>
+                <pre className={s.codigo}>$env:IDS=&quot;{id}&quot;; npm run relayer:fuji</pre>
+              </>
+            )}
             <SalidaRelayer {...relayer} explorer={config.explorer} />
           </>
         )}

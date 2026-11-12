@@ -4,8 +4,8 @@ import { leerDatos, mmEntero } from "@/lib/datos";
 import s from "./deck.module.css";
 
 export const metadata: Metadata = {
-  title: "Canon Climático · Pitch",
-  description: "Pitch de Canon Climático, para el track Blockchain de Avalanche.",
+  title: "AgroRenta · Pitch",
+  description: "Pitch de AgroRenta, para el track Blockchain de Avalanche.",
 };
 
 const TOTAL = 5;
@@ -20,7 +20,7 @@ function Slide({ n, oscura = false, children }: { n: number | null; oscura?: boo
       {children}
       {n !== null && (
         <footer className={s.pie}>
-          <span>Canon Climático · Hackathon Argentina Space 2026</span>
+          <span>AgroRenta · Hackathon Argentina Space 2026</span>
           <span>
             {n} / {TOTAL}
           </span>
@@ -103,9 +103,9 @@ export default function Deck() {
         <div className={s.portada}>
           <div>
             <p className={s.marca}>Hackathon Argentina Space 2026 · Track Blockchain</p>
-            <h1 className={s.portadaTitulo}>Canon Climático</h1>
+            <h1 className={s.portadaTitulo}>AgroRenta</h1>
             <p className={s.portadaSubtitulo}>
-              El saldo del alquiler rural se reparte solo, según la lluvia que mide un satélite.
+              El alquiler rural que se ajusta con la lluvia.
             </p>
             <ul className={s.portadaDatos}>
               <li>Alquiler de campo en Anta, Salta</li>
@@ -234,7 +234,7 @@ export default function Deck() {
           </div>
           <div>
             <h3>Cobra</h3>
-            <p>Canon Climático.</p>
+            <p>AgroRenta.</p>
           </div>
           <div>
             <h3>Canal</h3>

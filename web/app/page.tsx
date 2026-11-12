@@ -7,7 +7,7 @@ export default function Inicio() {
   if (!datos) {
     return (
       <main className="contenedor">
-        <h1>Canon Climático</h1>
+        <h1>AgroRenta</h1>
         <p>Faltan los datos de la página. Corré <code>npm run web:datos</code> en la raíz del repo.</p>
       </main>
     );
@@ -22,7 +22,7 @@ export default function Inicio() {
     <>
       <header className="portada">
         <div className="contenedor">
-          <p className="portada__marca">Canon Climático</p>
+          <p className="portada__marca">AgroRenta</p>
           <h1>El saldo del alquiler se reparte solo, según la lluvia que mide un satélite.</h1>
           <p className="portada__datos">
             Lote en Anta, Salta ({datos.punto.latitud.toLocaleString("es-AR")}, {datos.punto.longitud.toLocaleString("es-AR")})

@@ -34,7 +34,7 @@ Capturado el jueves 12 de noviembre de 2026, a las 9:50 (hora de Argentina). Las
 | Repo de skills del track | https://github.com/blastonyz/skills-track (copiado del commit `6c14b4c`) |
 | Workshops de Team1 | https://github.com/avalancheteam1/workshops |
 
-## Dónde encaja Canon Climático
+## Dónde encaja AgroRenta
 
 - **Categoría:** RWA como principal, cruzada con Geoespacial.
 - **Dato:** NASA POWER, que está en el catálogo de RWA.

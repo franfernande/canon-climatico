@@ -1,13 +1,15 @@
-# Canon Climático
+# AgroRenta
 
-Alquiler de campo con un saldo que se ajusta solo según la lluvia que mide un satélite.
+El alquiler rural que se ajusta con la lluvia: un saldo que se reparte solo según la lluvia que mide un satélite.
+
+El proyecto empezó como Canon Climático: el contrato (`CanonClimatico.sol`), el repo y algunas carpetas conservan ese nombre.
 
 El arrendatario deposita el saldo del alquiler en un contrato en Avalanche al firmar. Cuando termina la ventana de siembra, el contrato toma la lluvia acumulada en el lote y reparte ese saldo entre el dueño y el arrendatario, según tramos que acordaron de antemano.
 
 Track Blockchain de Avalanche · Hackathon Argentina Space 2026 · Salta, 11 al 13 de noviembre.
 Categoría principal: RWA (activos del mundo real), cruzada con Geoespacial.
 
-> Estado: contrato desplegado y liquidado en Fuji, con verificación OK en los dos alquileres. La página de demo está lista en local y el deck, en [entrega/canon-climatico-pitch.pdf](entrega/canon-climatico-pitch.pdf). Faltan el video y la carga en Hacki. Contexto para retomar: [CONTEXTO.md](CONTEXTO.md).
+> Estado: contrato desplegado y liquidado en Fuji, con verificación OK en los dos alquileres. La página de demo está lista en local y el deck, en [entrega/agrorenta-pitch.pdf](entrega/agrorenta-pitch.pdf). Faltan el video y la carga en Hacki. Contexto para retomar: [CONTEXTO.md](CONTEXTO.md).
 
 Requisitos, pautas y recursos del track, tal como los publicó la organización: [docs/hackathon/](docs/hackathon/README.md).
 
@@ -86,7 +88,7 @@ El umbral sale de la historia de la misma fuente porque las fuentes no coinciden
 1. **¿Quién desconfía de quién?** El dueño teme no cobrar el saldo en un año malo. El arrendatario teme pagar el alquiler entero en una sequía, o que el dueño no le devuelva su parte.
 2. **¿Qué evento queda en la cadena?** Al cierre de la ventana, el contrato reparte el depósito según la lluvia.
 3. **¿Qué pasa si el dato miente?** La fuente, el punto, la ventana, los umbrales y la dirección del relayer se fijan al crear el contrato y quedan públicos. El arrendatario los acepta al depositar. El relayer publica la lluvia junto con el hash SHA-256 de la respuesta de NASA POWER que guardó, y cualquiera puede comprobar tres cosas: que el archivo publicado tiene ese hash, que sus valores coinciden con un pedido nuevo a NASA POWER y que diciembre más enero da la lluvia que recibió el contrato. El hash no impide que el relayer mienta, pero deja la mentira a la vista y firmada por su dirección. En el MVP hay un solo relayer. Más adelante habrá dos fuentes o varios relayers, con un plazo para disputar.
-4. **¿Quién paga y quién cobra?** El arrendatario paga una comisión por contrato, porque es quien compra la protección. Cobra Canon Climático. El monto es un supuesto que hay que validar con usuarios.
+4. **¿Quién paga y quién cobra?** El arrendatario paga una comisión por contrato, porque es quien compra la protección. Cobra AgroRenta. El monto es un supuesto que hay que validar con usuarios.
 
 La comparación para la slide: con una cláusula en papel, el reparto depende de que dos partes con intereses opuestos se pongan de acuerdo después de la sequía. Con el contrato, la regla queda escrita al firmar y la plata ya está adentro.
 
@@ -200,7 +202,7 @@ web/public/datos/                 copia del JSON de cada liquidación, para baja
 web/app/(flujo)/                  pantallas con wallet: crear, depositar y cobrar
 web/components/flujo/             conexión a la wallet, lectura de la cadena y las cuatro pantallas
 web/app/deck/                     el pitch: portada y 5 slides
-entrega/canon-climatico-pitch.pdf el pitch en PDF, impreso desde /deck
+entrega/agrorenta-pitch.pdf el pitch en PDF, impreso desde /deck
 entrega/verificacion/             metadata del compilador, para verificar el código en el explorer
 entrega/guion-video.md            guion del video, con las pantallas con wallet y la preparación de la PC
 ```
@@ -285,7 +287,7 @@ Antes de abrir la wallet, cada operación se simula contra la cadena; si el cont
 En `/deck` está el pitch: una portada y 5 slides de 1280 × 720 (problema, solución, cómo funciona, por qué blockchain y modelo). Las evidencias se muestran en la demo, no en las slides. Para el PDF, con la página andando (`npm run build` y `npx next start -p 3210` dentro de `web/`), imprimila con Edge sin abrir ventana:
 
 ```
-& "C:\Program Files (x86)\Microsoft\Edge\Application\msedge.exe" --headless=new --no-pdf-header-footer --user-data-dir="$env:TEMP\edge-deck-$(Get-Date -Format HHmmss)" --print-to-pdf="$PWD\..\entrega\canon-climatico-pitch.pdf" http://localhost:3210/deck
+& "C:\Program Files (x86)\Microsoft\Edge\Application\msedge.exe" --headless=new --no-pdf-header-footer --user-data-dir="$env:TEMP\edge-deck-$(Get-Date -Format HHmmss)" --print-to-pdf="$PWD\..\entrega\agrorenta-pitch.pdf" http://localhost:3210/deck
 ```
 
 El perfil nuevo en cada corrida evita que Edge imprima una versión vieja de la página guardada en caché.
@@ -305,7 +307,7 @@ La lista completa y la checklist de la guía están en [docs/hackathon/01-requis
 
 - [x] Contrato desplegado en Fuji, con link al explorer ([`0x6A84…eA15`](https://explorer-test.avax.network/c-chain/address/0x6A84f4eB05f415AB414ca593e07B80728491eA15))
 - [ ] Video demo de 1 a 3 minutos, con una acción on-chain
-- [x] Pitch deck de 5 a 7 slides, con la slide «por qué blockchain» ([entrega/canon-climatico-pitch.pdf](entrega/canon-climatico-pitch.pdf))
+- [x] Pitch deck de 5 a 7 slides, con la slide «por qué blockchain» ([entrega/agrorenta-pitch.pdf](entrega/agrorenta-pitch.pdf))
 - [x] Este repositorio
 - [x] Atribución de las fuentes de datos
 

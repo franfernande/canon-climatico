@@ -1,4 +1,4 @@
-# Contexto para agentes — Canon Climático
+# Contexto para agentes — AgroRenta
 
 Actualizado: jueves 12 de noviembre de 2026, tarde (deck listo, verificación del código preparada y contrato #3 de 2014/15 preparado para liquidarlo en vivo).
 
@@ -29,7 +29,7 @@ Escrow de saldo de alquiler rural en Avalanche Fuji. El arrendatario deposita el
 | Deploy + liquidación en Fuji | **Hecho** (commit `3c2e55a`) |
 | Código verificado en el explorer | **Falta subirlo** (ver «Verificación del código») |
 | Video 1–3 min | **Falta**. Se liquida el #3 en vivo durante la grabación |
-| Pitch deck 5–7 slides | **Listo**: portada + 5 slides (problema, solución, cómo funciona, por qué blockchain, modelo) en `/deck` de `web/` → `entrega/canon-climatico-pitch.pdf`. Sin evidencias ni próximos pasos: eso va en la demo del video |
+| Pitch deck 5–7 slides | **Listo**: portada + 5 slides (problema, solución, cómo funciona, por qué blockchain, modelo) en `/deck` de `web/` → `entrega/agrorenta-pitch.pdf`. Sin evidencias ni próximos pasos: eso va en la demo del video |
 | Carga en Hacki | **Falta** |
 | Repo público / acceso jurado | Repo **privado**; hay que dar acceso o abrirlo al entregar |
 | Deploy en Vercel | **No obligatorio**. Solo aparece como tip en la skill `frontend` de skills-track. Los entregables oficiales no lo piden |
@@ -62,7 +62,7 @@ Fuente: `docs/hackathon/01-requisitos.md`.
 
 1. Contrato en Fuji + link explorer — hecho  
 2. Video demo 1–3 min con acción on-chain — falta  
-3. Pitch deck 5–7 slides con slide «por qué blockchain» — hecho (`entrega/canon-climatico-pitch.pdf`)  
+3. Pitch deck 5–7 slides con slide «por qué blockchain» — hecho (`entrega/agrorenta-pitch.pdf`)  
 4. Repo o link del proyecto — existe; cuidar acceso  
 5. Atribución de fuentes — hecha (README + pie de la web)  
 6. Opcional: `sample-data/` — hecho  
@@ -107,7 +107,7 @@ npm run verificar -- 3
 npm run web:datos
 ```
 
-Deck: `cd web && npm run build && npx next start -p 3210` y el comando de Edge de la sección «La página» del README, que reescribe `entrega/canon-climatico-pitch.pdf`.
+Deck: `cd web && npm run build && npx next start -p 3210` y el comando de Edge de la sección «La página» del README, que reescribe `entrega/agrorenta-pitch.pdf`.
 
 ## Estructura clave
 

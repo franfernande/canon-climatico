@@ -28,6 +28,8 @@ export type ConfigFlujo = {
   abi: InterfaceAbi;
   explorer: string;
   modoDemo: boolean;
+  /** El botón del relayer corre el script en el servidor: solo en local (npm run dev) o con RELAYER_DESDE_WEB=1. */
+  relayerDesdeWeb: boolean;
   fuente: string;
   punto: { latitud: number; longitud: number };
   /** Las tres cuentas de la demo. En esta versión de prueba son fijas. */

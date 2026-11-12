@@ -4,7 +4,7 @@ El video junta el pitch (slides del deck) y la demo en vivo en Fuji. La demo rec
 
 ## Cómo grabarlo
 
-1. **Slides:** abrir `entrega/canon-climatico-pitch.pdf` en Firefox y pasar a modo presentación (botón «>>» → «Modo presentación», o Ctrl+Alt+P). Se avanza con la flecha derecha.
+1. **Slides:** abrir `entrega/agrorenta-pitch.pdf` en Firefox y pasar a modo presentación (botón «>>» → «Modo presentación», o Ctrl+Alt+P). Se avanza con la flecha derecha.
 2. **Demo:** en otra pestaña, `http://localhost:3000/proceso`, con `npm run dev` corriendo en `web`.
 3. **Grabar la pantalla entera**, no solo la ventana de Firefox, porque las ventanas de MetaMask se abren aparte. Sirve la Herramienta Recortes (Win+Shift+R) u OBS. 1080p, notificaciones de Windows apagadas, Firefox al 125 % para la demo.
 4. Lo más cómodo es grabar la pantalla **sin voz** siguiendo la tabla, y después poner la voz encima en Clipchamp (viene con Windows), cortando las esperas de MetaMask y de Fuji. Así el video entra en 3 minutos sin apuro.
@@ -23,9 +23,9 @@ El alquiler nuevo va a ser el **#5** si nadie crea otro antes; si sale otro núm
 
 | Tiempo | Pantalla y acción | Voz |
 | --- | --- | --- |
-| 0:00–0:03 | **Portada**: título, subtítulo e ilustración | Sin voz, o solo «Canon Climático». |
+| 0:00–0:03 | **Portada**: título, subtítulo e ilustración | Sin voz, o solo «AgroRenta». |
 | 0:03–0:25 | **Slide 1**, el problema y las tres salidas de hoy | «En Anta, Salta, la soja se siembra sin riego y el campo se alquila a valor fijo: anticipo al firmar y saldo en la cosecha. Si hay sequía, el arrendatario paga igual. Hoy hay tres salidas: la aparcería depende de lo que se declare; la cláusula climática se negocia después de la sequía, y la imprevisión es un juicio lento y caro. Ninguna se ejecuta sola.» |
-| 0:25–0:40 | **Slide 2**, solución: los tres tramos | «Canon Climático pone el saldo en un contrato en Avalanche al firmar, y lo reparte solo según la lluvia que mide NASA en el lote: más de 305 milímetros, todo al dueño; entre 255 y 305, vuelve el 20 % al arrendatario; menos, la mitad.» |
+| 0:25–0:40 | **Slide 2**, solución: los tres tramos | «AgroRenta pone el saldo en un contrato en Avalanche al firmar, y lo reparte solo según la lluvia que mide NASA en el lote: más de 305 milímetros, todo al dueño; entre 255 y 305, vuelve el 20 % al arrendatario; menos, la mitad.» |
 | 0:40–0:46 | **Slide 3**, cómo funciona: firma, dato y reparto | «Funciona en tres pasos: la firma, el dato y el reparto. Veámoslo en vivo, en la red de prueba de Avalanche.» |
 | 0:46–0:56 | **Demo · pantalla 1, «1. Wallets»** (`/proceso`). Señalar la barra con los cuatro pasos y la tabla de las tres wallets. «Conectar MetaMask» con la cuenta **dueño**: la fila del dueño queda marcada | «La demo sigue los cuatro pasos de la barra. Primero, las wallets: el dueño, el arrendatario y el relayer, cada uno con su dirección. Conecto la del dueño.» |
 | 0:56–1:12 | **Pantalla 2, «2. Crear (dueño)»**. Mostrar lo que queda fijo y elegir campaña 2014/15 y saldo 0,01; los tramos se actualizan. «Firmar y crear el alquiler» → MetaMask → «Alquiler #5 creado» → clic en el link | «Paso dos, la pantalla del dueño: elige la campaña, el saldo y los tramos, y ve cómo se reparte. Firma, y las condiciones quedan en la cadena: ya nadie las puede cambiar. Le queda un link para el arrendatario.» |
@@ -34,7 +34,7 @@ El alquiler nuevo va a ser el **#5** si nadie crea otro antes; si sale otro núm
 | 1:50–2:05 | **Pantalla 4, «4. Cobrar»**. Con el arrendatario, «Retirar 0,002 AVAX». Cambiar a dueño en MetaMask, «Retirar 0,008 AVAX» (en la edición, este segundo retiro puede ir acelerado) | «Paso cuatro, cobrar: cada uno retira lo suyo desde su wallet, sin pedirle nada al otro, y cada transacción queda en el explorer de Avalanche.» |
 | 2:05–2:30 | **Slide 4**, por qué blockchain | «¿Por qué blockchain? Dueño y arrendatario desconfían entre sí. Con una cláusula en papel, el ajuste se negocia después; acá la regla y la plata están desde la firma. ¿Y si el relayer miente? El hash del dato queda publicado: cualquiera lo verifica sin claves, y la mentira queda firmada.» |
 | 2:30–2:47 | **Slide 5**, modelo de negocio | «Paga el arrendatario, con una comisión por contrato, porque es quien compra la protección. Llegamos por los corredores rurales que ya redactan estos contratos. El dato es gratis; el costo es el gas.» |
-| 2:47–3:00 | **Portada** otra vez, para cerrar | «Canon Climático: el saldo del alquiler se reparte solo, según la lluvia. Datos de NASA POWER, contrato en Avalanche Fuji.» |
+| 2:47–3:00 | **Portada** otra vez, para cerrar | «AgroRenta: el alquiler rural que se ajusta con la lluvia. Datos de NASA POWER, contrato en Avalanche Fuji.» |
 
 Si el video se pasa de 3 minutos, primero acortá las esperas de la demo; después, la voz de la slide 5 se puede reducir a «Paga el arrendatario, con una comisión por contrato».
 

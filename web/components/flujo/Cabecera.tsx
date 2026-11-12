@@ -18,7 +18,7 @@ export function Cabecera() {
     <header className={s.cabecera}>
       <div className={s.cabeceraFila}>
         <Link href="/" className={s.marca}>
-          Canon Climático
+          AgroRenta
         </Link>
         <PanelWallet />
       </div>
