@@ -208,7 +208,9 @@ npm install
 npm test
 ```
 
-Los tests usan la historia real de NASA POWER guardada en `sample-data/nasa-power-anta-2004-2025.json`. Comprueban la lluvia de las 21 campañas de la tabla, el reparto de cada tramo y los controles del contrato.
+Los tests usan la historia real de NASA POWER guardada en `sample-data/nasa-power-anta-2004-2025.json`. Comprueban la lluvia de las 21 campañas de la tabla, el reparto de cada tramo y los controles del contrato: que el relayer no sea una de las partes, que un dueño que rechaza pagos no trabe el cobro del arrendatario, que no se pueda retirar dos veces, el reembolso a los 60 días y el modo demo. Son 33 tests y pasan todos.
+
+La demo completa también se ensayó en una red local (`npx hardhat node`): despliegue, creación y depósito de 2024/25 y 2023/24, liquidación con el dato pedido en el momento a NASA POWER (243,2 mm, mitad y mitad; 323,6 mm, todo al dueño), retiro de las dos partes, verificación de los dos contratos con los tres controles en OK y exportación de los datos de la página.
 
 ### En Fuji
 
@@ -229,7 +231,7 @@ Los tests usan la historia real de NASA POWER guardada en `sample-data/nasa-powe
    ```
 
    Hardhat las carga con `dotenv`. También sirven como variables de entorno del sistema con esos mismos nombres.
-4. Desplegá, creá los dos contratos de la demo, liquidalos, cobrá y verificá:
+4. Desplegá, creá los dos contratos de la demo, liquidalos, cobrá y verificá. El orden importa: liquidar solo anota lo que le toca a cada parte, y la plata llega a las cuentas recién con `retirar`, después del relayer:
 
    ```
    npm run deploy:fuji
