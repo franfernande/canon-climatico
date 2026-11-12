@@ -75,4 +75,6 @@ console.log(`Dato: ${url}`);
 for (const [descripcion, ok, detalle] of controles) {
   console.log(`${ok ? "OK   " : "FALLA"} ${descripcion}: ${detalle}`);
 }
-process.exit(controles.every(([, ok]) => ok) ? 0 : 1);
+// exitCode en vez de process.exit(): en Windows, cortar con la conexión a NASA POWER
+// todavía abierta hace fallar a Node con un error interno aunque los controles den OK.
+process.exitCode = controles.every(([, ok]) => ok) ? 0 : 1;
