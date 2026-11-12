@@ -5,6 +5,7 @@ types/
 coverage/
 .env
 .env.*
+!.env.example
 deployments/localhost.json
 sample-data/localhost/
 .next/

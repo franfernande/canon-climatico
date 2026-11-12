@@ -208,15 +208,21 @@ Los tests usan la historia real de NASA POWER guardada en `sample-data/nasa-powe
 
 1. Creá tres cuentas en Core Wallet, en modo testnet: el relayer (también despliega), el dueño y el arrendatario. Tienen que ser distintas.
 2. Pedí AVAX de prueba en el faucet para la cuenta del relayer. Con 0,5 AVAX alcanza: el script de la demo le pasa al dueño y al arrendatario lo que necesitan.
-3. Cargá las tres claves privadas en el keystore de Hardhat, que las guarda cifradas fuera del repo:
+3. Cargá las tres claves privadas en un archivo `.env` en la raíz (está en `.gitignore`; no lo subas):
 
    ```
-   npx hardhat keystore set FUJI_PRIVATE_KEY
-   npx hardhat keystore set FUJI_DUENO_KEY
-   npx hardhat keystore set FUJI_ARRENDATARIO_KEY
+   copy .env.example .env
    ```
 
-   También se pueden pasar como variables de entorno con esos mismos nombres. Nunca las subas al repo.
+   Completá estas variables y **guardá** el archivo:
+
+   ```
+   FUJI_PRIVATE_KEY=0x...
+   FUJI_DUENO_KEY=0x...
+   FUJI_ARRENDATARIO_KEY=0x...
+   ```
+
+   Hardhat las carga con `dotenv`. También sirven como variables de entorno del sistema con esos mismos nombres.
 4. Desplegá, creá los dos contratos de la demo, liquidalos y verificá:
 
    ```
