@@ -28,6 +28,9 @@ export default function Inicio() {
             Lote en Anta, Salta ({datos.punto.latitud.toLocaleString("es-AR")}, {datos.punto.longitud.toLocaleString("es-AR")})
             · lluvia de diciembre y enero · NASA POWER · Avalanche Fuji
           </p>
+          <p className="portada__accion">
+            <a href="/proceso">Probar el flujo con wallets: crear, depositar y cobrar →</a>
+          </p>
         </div>
       </header>
 

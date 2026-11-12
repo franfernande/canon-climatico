@@ -49,6 +49,7 @@ if (existsSync(rutaDespliegue(red))) {
     direccion: d.direccion,
     link: linkDireccion(red, d.direccion),
     linkDespliegue: linkTx(red, d.txDespliegue),
+    abi: d.abi,
   };
 
   const cantidad = Number(await canon.getFunction("cantidad")());

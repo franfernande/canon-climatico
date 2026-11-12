@@ -54,7 +54,7 @@ export function TarjetaAlquiler({ a }: { a: AlquilerWeb }) {
       ) : (
         <p className="tarjeta__espera">
           {a.estado === "Depositado"
-            ? `Saldo de ${avax(a.saldoAvax)} en custodia, esperando el cierre de la ventana y el relayer.`
+            ? `Saldo de ${avax(a.saldoAvax)} en custodia, hasta que el relayer publique la lluvia.`
             : `Saldo pactado: ${avax(a.saldoAvax)}.`}
         </p>
       )}

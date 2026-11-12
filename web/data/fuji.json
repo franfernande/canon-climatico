@@ -1,6 +1,6 @@
 {
   "red": "fuji",
-  "generado": "2026-11-12T15:46:48.069Z",
+  "generado": "2026-11-12T17:58:10.319Z",
   "explorer": "https://explorer-test.avax.network/c-chain",
   "fuente": "NASA POWER PRECTOTCORR_SUM",
   "punto": {
@@ -122,7 +122,571 @@
     "modoDemo": true,
     "direccion": "0x6A84f4eB05f415AB414ca593e07B80728491eA15",
     "link": "https://explorer-test.avax.network/c-chain/address/0x6A84f4eB05f415AB414ca593e07B80728491eA15",
-    "linkDespliegue": "https://explorer-test.avax.network/c-chain/tx/0x02b862db95991f4057a44e0a876ea0b25c44200651c4e5907b2866095b2a7b36"
+    "linkDespliegue": "https://explorer-test.avax.network/c-chain/tx/0x02b862db95991f4057a44e0a876ea0b25c44200651c4e5907b2866095b2a7b36",
+    "abi": [
+      {
+        "type": "constructor",
+        "stateMutability": "undefined",
+        "payable": false,
+        "inputs": [
+          {
+            "type": "bool",
+            "name": "_modoDemo"
+          }
+        ]
+      },
+      {
+        "type": "error",
+        "name": "CondicionesInvalidas",
+        "inputs": [
+          {
+            "type": "string",
+            "name": "motivo"
+          }
+        ]
+      },
+      {
+        "type": "error",
+        "name": "EstadoInvalido",
+        "inputs": [
+          {
+            "type": "uint8",
+            "name": "actual"
+          }
+        ]
+      },
+      {
+        "type": "error",
+        "name": "HashVacio",
+        "inputs": []
+      },
+      {
+        "type": "error",
+        "name": "MontoIncorrecto",
+        "inputs": [
+          {
+            "type": "uint256",
+            "name": "esperado"
+          },
+          {
+            "type": "uint256",
+            "name": "recibido"
+          }
+        ]
+      },
+      {
+        "type": "error",
+        "name": "NadaParaRetirar",
+        "inputs": []
+      },
+      {
+        "type": "error",
+        "name": "NoExiste",
+        "inputs": [
+          {
+            "type": "uint256",
+            "name": "id"
+          }
+        ]
+      },
+      {
+        "type": "error",
+        "name": "PlazoLiquidacionVigente",
+        "inputs": []
+      },
+      {
+        "type": "error",
+        "name": "PlazoVencido",
+        "inputs": []
+      },
+      {
+        "type": "error",
+        "name": "PlazoVigente",
+        "inputs": []
+      },
+      {
+        "type": "error",
+        "name": "SoloArrendatario",
+        "inputs": []
+      },
+      {
+        "type": "error",
+        "name": "SoloDueno",
+        "inputs": []
+      },
+      {
+        "type": "error",
+        "name": "SoloRelayer",
+        "inputs": []
+      },
+      {
+        "type": "error",
+        "name": "TransferenciaFallida",
+        "inputs": [
+          {
+            "type": "address",
+            "name": "destino"
+          }
+        ]
+      },
+      {
+        "type": "error",
+        "name": "VentanaAbierta",
+        "inputs": []
+      },
+      {
+        "type": "event",
+        "anonymous": false,
+        "name": "Cancelado",
+        "inputs": [
+          {
+            "type": "uint256",
+            "name": "id",
+            "indexed": true
+          }
+        ]
+      },
+      {
+        "type": "event",
+        "anonymous": false,
+        "name": "Creado",
+        "inputs": [
+          {
+            "type": "uint256",
+            "name": "id",
+            "indexed": true
+          },
+          {
+            "type": "address",
+            "name": "dueno",
+            "indexed": true
+          },
+          {
+            "type": "address",
+            "name": "arrendatario",
+            "indexed": true
+          },
+          {
+            "type": "address",
+            "name": "relayer",
+            "indexed": false
+          },
+          {
+            "type": "uint256",
+            "name": "saldo",
+            "indexed": false
+          }
+        ]
+      },
+      {
+        "type": "event",
+        "anonymous": false,
+        "name": "Depositado",
+        "inputs": [
+          {
+            "type": "uint256",
+            "name": "id",
+            "indexed": true
+          },
+          {
+            "type": "uint256",
+            "name": "monto",
+            "indexed": false
+          }
+        ]
+      },
+      {
+        "type": "event",
+        "anonymous": false,
+        "name": "Liquidado",
+        "inputs": [
+          {
+            "type": "uint256",
+            "name": "id",
+            "indexed": true
+          },
+          {
+            "type": "uint32",
+            "name": "lluviaDecimasMm",
+            "indexed": false
+          },
+          {
+            "type": "bytes32",
+            "name": "hashDato",
+            "indexed": false
+          },
+          {
+            "type": "uint256",
+            "name": "alDueno",
+            "indexed": false
+          },
+          {
+            "type": "uint256",
+            "name": "alArrendatario",
+            "indexed": false
+          }
+        ]
+      },
+      {
+        "type": "event",
+        "anonymous": false,
+        "name": "Reembolsado",
+        "inputs": [
+          {
+            "type": "uint256",
+            "name": "id",
+            "indexed": true
+          },
+          {
+            "type": "uint256",
+            "name": "alDueno",
+            "indexed": false
+          },
+          {
+            "type": "uint256",
+            "name": "alArrendatario",
+            "indexed": false
+          }
+        ]
+      },
+      {
+        "type": "event",
+        "anonymous": false,
+        "name": "Retirado",
+        "inputs": [
+          {
+            "type": "address",
+            "name": "cuenta",
+            "indexed": true
+          },
+          {
+            "type": "uint256",
+            "name": "monto",
+            "indexed": false
+          }
+        ]
+      },
+      {
+        "type": "function",
+        "name": "PLAZO_LIQUIDACION",
+        "constant": true,
+        "stateMutability": "view",
+        "payable": false,
+        "inputs": [],
+        "outputs": [
+          {
+            "type": "uint64",
+            "name": ""
+          }
+        ]
+      },
+      {
+        "type": "function",
+        "name": "alquiler",
+        "constant": true,
+        "stateMutability": "view",
+        "payable": false,
+        "inputs": [
+          {
+            "type": "uint256",
+            "name": "id"
+          }
+        ],
+        "outputs": [
+          {
+            "type": "tuple",
+            "name": "",
+            "components": [
+              {
+                "type": "address",
+                "name": "dueno"
+              },
+              {
+                "type": "uint8",
+                "name": "estado"
+              },
+              {
+                "type": "uint32",
+                "name": "lluviaDecimasMm"
+              },
+              {
+                "type": "bytes32",
+                "name": "hashDato"
+              },
+              {
+                "type": "tuple",
+                "name": "condiciones",
+                "components": [
+                  {
+                    "type": "address",
+                    "name": "arrendatario"
+                  },
+                  {
+                    "type": "address",
+                    "name": "relayer"
+                  },
+                  {
+                    "type": "uint256",
+                    "name": "saldo"
+                  },
+                  {
+                    "type": "int32",
+                    "name": "latitudE4"
+                  },
+                  {
+                    "type": "int32",
+                    "name": "longitudE4"
+                  },
+                  {
+                    "type": "string",
+                    "name": "fuente"
+                  },
+                  {
+                    "type": "uint64",
+                    "name": "inicioVentana"
+                  },
+                  {
+                    "type": "uint64",
+                    "name": "finVentana"
+                  },
+                  {
+                    "type": "uint64",
+                    "name": "plazoDeposito"
+                  },
+                  {
+                    "type": "uint32",
+                    "name": "umbralBajo"
+                  },
+                  {
+                    "type": "uint32",
+                    "name": "umbralAlto"
+                  },
+                  {
+                    "type": "uint8",
+                    "name": "pctMedio"
+                  },
+                  {
+                    "type": "uint8",
+                    "name": "pctBajo"
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "type": "function",
+        "name": "cancelar",
+        "constant": false,
+        "payable": false,
+        "inputs": [
+          {
+            "type": "uint256",
+            "name": "id"
+          }
+        ],
+        "outputs": []
+      },
+      {
+        "type": "function",
+        "name": "cantidad",
+        "constant": true,
+        "stateMutability": "view",
+        "payable": false,
+        "inputs": [],
+        "outputs": [
+          {
+            "type": "uint256",
+            "name": ""
+          }
+        ]
+      },
+      {
+        "type": "function",
+        "name": "crear",
+        "constant": false,
+        "payable": false,
+        "inputs": [
+          {
+            "type": "tuple",
+            "name": "c",
+            "components": [
+              {
+                "type": "address",
+                "name": "arrendatario"
+              },
+              {
+                "type": "address",
+                "name": "relayer"
+              },
+              {
+                "type": "uint256",
+                "name": "saldo"
+              },
+              {
+                "type": "int32",
+                "name": "latitudE4"
+              },
+              {
+                "type": "int32",
+                "name": "longitudE4"
+              },
+              {
+                "type": "string",
+                "name": "fuente"
+              },
+              {
+                "type": "uint64",
+                "name": "inicioVentana"
+              },
+              {
+                "type": "uint64",
+                "name": "finVentana"
+              },
+              {
+                "type": "uint64",
+                "name": "plazoDeposito"
+              },
+              {
+                "type": "uint32",
+                "name": "umbralBajo"
+              },
+              {
+                "type": "uint32",
+                "name": "umbralAlto"
+              },
+              {
+                "type": "uint8",
+                "name": "pctMedio"
+              },
+              {
+                "type": "uint8",
+                "name": "pctBajo"
+              }
+            ]
+          }
+        ],
+        "outputs": [
+          {
+            "type": "uint256",
+            "name": "id"
+          }
+        ]
+      },
+      {
+        "type": "function",
+        "name": "depositar",
+        "constant": false,
+        "stateMutability": "payable",
+        "payable": true,
+        "inputs": [
+          {
+            "type": "uint256",
+            "name": "id"
+          }
+        ],
+        "outputs": []
+      },
+      {
+        "type": "function",
+        "name": "liquidar",
+        "constant": false,
+        "payable": false,
+        "inputs": [
+          {
+            "type": "uint256",
+            "name": "id"
+          },
+          {
+            "type": "uint32",
+            "name": "lluviaDecimasMm"
+          },
+          {
+            "type": "bytes32",
+            "name": "hashDato"
+          }
+        ],
+        "outputs": []
+      },
+      {
+        "type": "function",
+        "name": "modoDemo",
+        "constant": true,
+        "stateMutability": "view",
+        "payable": false,
+        "inputs": [],
+        "outputs": [
+          {
+            "type": "bool",
+            "name": ""
+          }
+        ]
+      },
+      {
+        "type": "function",
+        "name": "pendiente",
+        "constant": true,
+        "stateMutability": "view",
+        "payable": false,
+        "inputs": [
+          {
+            "type": "address",
+            "name": ""
+          }
+        ],
+        "outputs": [
+          {
+            "type": "uint256",
+            "name": ""
+          }
+        ]
+      },
+      {
+        "type": "function",
+        "name": "porcentajeArrendatario",
+        "constant": true,
+        "stateMutability": "view",
+        "payable": false,
+        "inputs": [
+          {
+            "type": "uint256",
+            "name": "id"
+          },
+          {
+            "type": "uint32",
+            "name": "lluviaDecimasMm"
+          }
+        ],
+        "outputs": [
+          {
+            "type": "uint8",
+            "name": ""
+          }
+        ]
+      },
+      {
+        "type": "function",
+        "name": "reembolsar",
+        "constant": false,
+        "payable": false,
+        "inputs": [
+          {
+            "type": "uint256",
+            "name": "id"
+          }
+        ],
+        "outputs": []
+      },
+      {
+        "type": "function",
+        "name": "retirar",
+        "constant": false,
+        "payable": false,
+        "inputs": [],
+        "outputs": []
+      }
+    ]
   },
   "alquileres": [
     {
@@ -187,6 +751,30 @@
         "crear": "https://explorer-test.avax.network/c-chain/tx/0xfdca5d29e5b2303a64f6920a29dc8b2a03a24a59b43d5f911f5dd9bd71cba433",
         "depositar": "https://explorer-test.avax.network/c-chain/tx/0x256a89c5c3282041f1b9b690159b784443c7e237c24145892a3f25302172157d",
         "liquidar": "https://explorer-test.avax.network/c-chain/tx/0x03095ac73e0630bade317002dfb3ceec01c092f1204cf3256b6fea2a30fbe940"
+      }
+    },
+    {
+      "id": 3,
+      "campania": "2014/15",
+      "estado": "Depositado",
+      "saldoAvax": "0.1",
+      "umbralBajo": 2550,
+      "umbralAlto": 3050,
+      "pctMedio": 20,
+      "pctBajo": 50,
+      "lluviaDecimasMm": null,
+      "reparto": null,
+      "hashDato": null,
+      "dato": null,
+      "cuentas": {
+        "dueno": "0x7886feDe3654F87CB7c5ce5910431404767A634A",
+        "arrendatario": "0x2649593daD167e8C76d6408fAf7682FDEdDBb51e",
+        "relayer": "0x9FB4fe8c514c19a4D9D851f32b7546136377D3e2"
+      },
+      "links": {
+        "crear": "https://explorer-test.avax.network/c-chain/tx/0x958ea9083fdf5ea5baf97002ea30900a9674a0bf7b159115518e88e4936bb47d",
+        "depositar": "https://explorer-test.avax.network/c-chain/tx/0x3eadacf3441d480e2167dc5f94a16d573acd8e8a3236268aa1d7972448f6fc38",
+        "liquidar": null
       }
     }
   ]

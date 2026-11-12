@@ -7,7 +7,7 @@ El arrendatario deposita el saldo del alquiler en un contrato en Avalanche al fi
 Track Blockchain de Avalanche · Hackathon Argentina Space 2026 · Salta, 11 al 13 de noviembre.
 Categoría principal: RWA (activos del mundo real), cruzada con Geoespacial.
 
-> Estado: contrato desplegado y liquidado en Fuji, con verificación OK en los dos alquileres. Falta publicar la página, el deck y el video.
+> Estado: contrato desplegado y liquidado en Fuji, con verificación OK en los dos alquileres. La página de demo está lista en local y el deck, en [entrega/canon-climatico-pitch.pdf](entrega/canon-climatico-pitch.pdf). Faltan el video y la carga en Hacki. Contexto para retomar: [CONTEXTO.md](CONTEXTO.md).
 
 Requisitos, pautas y recursos del track, tal como los publicó la organización: [docs/hackathon/](docs/hackathon/README.md).
 
@@ -188,7 +188,7 @@ test/CanonClimatico.ts            tests del contrato, con Hardhat 3 y ethers v6
 test/power.ts                     tests del cálculo de la lluvia
 scripts/lib/power.ts              NASA POWER: URL, meses de la ventana, suma y SHA-256
 scripts/deploy.ts                 despliega y guarda la dirección y el ABI en deployments/
-scripts/demo.ts                   crea y deposita los contratos de 2024/25 y 2023/24
+scripts/demo.ts                   crea y deposita los contratos de 2024/25 y 2023/24, o los de CAMPANIAS
 scripts/relayer.ts                NASA POWER -> sample-data -> hash -> liquidar()
 scripts/verificar.ts              compara el hash, los valores y la suma, sin claves
 scripts/exportar-web.ts           lee la cadena y arma los datos de la página
@@ -197,6 +197,12 @@ sample-data/                      respuestas de NASA POWER
 web/                              página de la demo, en Next.js y estática
 web/data/fuji.json                lo que muestra la página, generado por exportar-web
 web/public/datos/                 copia del JSON de cada liquidación, para bajarlo y comprobar el hash
+web/app/(flujo)/                  pantallas con wallet: crear, depositar y cobrar
+web/components/flujo/             conexión a la wallet, lectura de la cadena y las cuatro pantallas
+web/app/deck/                     el pitch en 7 slides, con los mismos datos de la página
+entrega/canon-climatico-pitch.pdf el pitch en PDF, impreso desde /deck
+entrega/verificacion/             metadata del compilador, para verificar el código en el explorer
+entrega/guion-video.md            guion del video, con las pantallas con wallet y la preparación de la PC
 ```
 
 ## Cómo correrlo
@@ -246,8 +252,9 @@ La demo completa también se ensayó en una red local (`npx hardhat node`): desp
    ```
    git add deployments/fuji.json sample-data/fuji/
    ```
+6. Verificá el código en el explorer, así las llamadas y los eventos se leen por nombre: en [explorer-test.avax.network](https://explorer-test.avax.network/c-chain), Tools → Smart Contract Verification, subí `contracts/CanonClimatico.sol` y `entrega/verificacion/metadata.json` y pegá la dirección del contrato. El metadata sale del mismo input que está en `artifacts/build-info/`, y su hash IPFS es el que figura al final del bytecode desplegado.
 
-Cada script imprime los links al explorer. La dirección, el ABI y las transacciones quedan en `deployments/fuji.json`, y la respuesta de NASA POWER que usó el relayer, en `sample-data/fuji/<contrato>/<id>.json`. Si NASA POWER no responde, el relayer puede usar una respuesta ya guardada: en PowerShell, `$env:ARCHIVO="ruta.json"; npm run relayer:fuji`. Con `$env:IDS="1"` liquida solo ese contrato.
+Cada script imprime los links al explorer. La dirección, el ABI y las transacciones quedan en `deployments/fuji.json`, y la respuesta de NASA POWER que usó el relayer, en `sample-data/fuji/<contrato>/<id>.json`. Si NASA POWER no responde, el relayer puede usar una respuesta ya guardada: en PowerShell, `$env:ARCHIVO="ruta.json"; npm run relayer:fuji`. Con `$env:IDS="1"` liquida solo ese contrato. Con `$env:CAMPANIAS="2014"`, `demo:fuji` crea y deposita solo el contrato de esa campaña (2014 es la 2014/15).
 
 ### La página
 
@@ -261,6 +268,25 @@ npm run dev
 ```
 
 Muestra la regla de los tramos, la lluvia de las 21 campañas contra los umbrales y una tarjeta por contrato, con la lluvia, el reparto, los links al explorer y el JSON de NASA POWER que usó el relayer.
+
+### Probar el flujo con wallets
+
+En `/proceso` empieza el flujo con wallets, que sí firma transacciones en Fuji desde el navegador, con Core o MetaMask:
+
+1. `/proceso`: conectar la wallet y ver las tres cuentas de la demo y los alquileres del contrato.
+2. `/crear`: el dueño elige la campaña, el saldo, los umbrales y los porcentajes, y firma `crear`. Le queda un link para el arrendatario.
+3. `/alquiler/<id>`: el arrendatario lee las condiciones desde la cadena y firma `depositar`. Cuando el relayer liquida (en la terminal), la pantalla se actualiza sola.
+4. `/cobrar`: cada parte ve lo que tiene para cobrar y firma `retirar`.
+
+En esta versión de prueba las direcciones del dueño, el arrendatario y el relayer están fijas: son las de los alquileres de la demo. Para cada paso hay que elegir en la wallet la cuenta que corresponde, así que el dueño y el arrendatario tienen que estar importados en ella. Antes de abrir la wallet, cada operación se simula contra la cadena; si el contrato la rechazaría, la pantalla explica por qué y no pide la firma.
+
+En `/deck` está el pitch en 7 slides de 1280 × 720, armado con los mismos datos y componentes. Para el PDF, con la página andando (`npm run build` y `npx next start -p 3210` dentro de `web/`), imprimila con Edge sin abrir ventana:
+
+```
+& "C:\Program Files (x86)\Microsoft\Edge\Application\msedge.exe" --headless=new --no-pdf-header-footer --user-data-dir="$env:TEMP\edge-deck-$(Get-Date -Format HHmmss)" --print-to-pdf="$PWD\..\entrega\canon-climatico-pitch.pdf" http://localhost:3210/deck
+```
+
+El perfil nuevo en cada corrida evita que Edge imprima una versión vieja de la página guardada en caché.
 
 Para probarla con un ensayo local: `npx hardhat node` en una terminal; en otra, deploy, demo y relayer con `--network localhost`, después `node scripts/exportar-web.ts localhost` y, dentro de `web/`, `$env:RED="localhost"; npm run dev`.
 
@@ -277,7 +303,7 @@ La lista completa y la checklist de la guía están en [docs/hackathon/01-requis
 
 - [x] Contrato desplegado en Fuji, con link al explorer ([`0x6A84…eA15`](https://explorer-test.avax.network/c-chain/address/0x6A84f4eB05f415AB414ca593e07B80728491eA15))
 - [ ] Video demo de 1 a 3 minutos, con una acción on-chain
-- [ ] Pitch deck de 5 a 7 slides, con la slide «por qué blockchain»
+- [x] Pitch deck de 5 a 7 slides, con la slide «por qué blockchain» ([entrega/canon-climatico-pitch.pdf](entrega/canon-climatico-pitch.pdf))
 - [x] Este repositorio
 - [x] Atribución de las fuentes de datos
 

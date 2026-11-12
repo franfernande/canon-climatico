@@ -1,3 +1,5 @@
+import type { JsonFragment } from "ethers";
+
 export type Tramo = "alto" | "medio" | "bajo";
 
 export type Campania = {
@@ -32,6 +34,13 @@ export type DatosWeb = {
   punto: { latitud: number; longitud: number };
   umbrales: { bajo: number; alto: number };
   historia: Campania[];
-  contrato: { direccion: string; link: string; linkDespliegue: string; modoDemo?: boolean } | null;
+  contrato: {
+    direccion: string;
+    link: string;
+    linkDespliegue: string;
+    modoDemo?: boolean;
+    /** Para que las pantallas con wallet llamen al contrato desde el navegador. */
+    abi?: JsonFragment[];
+  } | null;
   alquileres: AlquilerWeb[];
 };
