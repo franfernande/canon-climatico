@@ -7,7 +7,7 @@ El arrendatario deposita el saldo del alquiler en un contrato en Avalanche al fi
 Track Blockchain de Avalanche · Hackathon Argentina Space 2026 · Salta, 11 al 13 de noviembre.
 Categoría principal: RWA (activos del mundo real), cruzada con Geoespacial.
 
-> Estado: el contrato, los tests, el relayer, el verificador y la página de la demo están listos y probados en una red local. Falta desplegar en Fuji, publicar la página y hacer el deck y el video.
+> Estado: contrato desplegado y liquidado en Fuji, con verificación OK en los dos alquileres. Falta publicar la página, el deck y el video.
 
 Requisitos, pautas y recursos del track, tal como los publicó la organización: [docs/hackathon/](docs/hackathon/README.md).
 
@@ -260,7 +260,7 @@ npm install
 npm run dev
 ```
 
-Muestra la regla de los tramos, la lluvia de las 21 campañas contra los umbrales y una tarjeta por contrato, con la lluvia, el reparto, los links al explorer y el JSON de NASA POWER que usó el relayer. Antes del despliegue avisa que el contrato todavía no está en Fuji.
+Muestra la regla de los tramos, la lluvia de las 21 campañas contra los umbrales y una tarjeta por contrato, con la lluvia, el reparto, los links al explorer y el JSON de NASA POWER que usó el relayer.
 
 Para probarla con un ensayo local: `npx hardhat node` en una terminal; en otra, deploy, demo y relayer con `--network localhost`, después `node scripts/exportar-web.ts localhost` y, dentro de `web/`, `$env:RED="localhost"; npm run dev`.
 
@@ -275,11 +275,11 @@ Para probarla con un ensayo local: `npx hardhat node` en una terminal; en otra, 
 
 La lista completa y la checklist de la guía están en [docs/hackathon/01-requisitos.md](docs/hackathon/01-requisitos.md).
 
-- [ ] Contrato desplegado en Fuji, con link al explorer
+- [x] Contrato desplegado en Fuji, con link al explorer ([`0x6A84…eA15`](https://explorer-test.avax.network/c-chain/address/0x6A84f4eB05f415AB414ca593e07B80728491eA15))
 - [ ] Video demo de 1 a 3 minutos, con una acción on-chain
 - [ ] Pitch deck de 5 a 7 slides, con la slide «por qué blockchain»
-- [ ] Este repositorio
-- [ ] Atribución de las fuentes de datos
+- [x] Este repositorio
+- [x] Atribución de las fuentes de datos
 
 ## Próximos pasos
 

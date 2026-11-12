@@ -1,6 +1,6 @@
 {
   "red": "fuji",
-  "generado": "2026-11-12T14:26:45.595Z",
+  "generado": "2026-11-12T15:46:48.069Z",
   "explorer": "https://explorer-test.avax.network/c-chain",
   "fuente": "NASA POWER PRECTOTCORR_SUM",
   "punto": {
@@ -118,6 +118,76 @@
       "lluviaDecimasMm": 2432
     }
   ],
-  "contrato": null,
-  "alquileres": []
+  "contrato": {
+    "modoDemo": true,
+    "direccion": "0x6A84f4eB05f415AB414ca593e07B80728491eA15",
+    "link": "https://explorer-test.avax.network/c-chain/address/0x6A84f4eB05f415AB414ca593e07B80728491eA15",
+    "linkDespliegue": "https://explorer-test.avax.network/c-chain/tx/0x02b862db95991f4057a44e0a876ea0b25c44200651c4e5907b2866095b2a7b36"
+  },
+  "alquileres": [
+    {
+      "id": 1,
+      "campania": "2024/25",
+      "estado": "Liquidado",
+      "saldoAvax": "0.1",
+      "umbralBajo": 2550,
+      "umbralAlto": 3050,
+      "pctMedio": 20,
+      "pctBajo": 50,
+      "lluviaDecimasMm": 2432,
+      "reparto": {
+        "pctArrendatario": 50,
+        "alDuenoAvax": "0.05",
+        "alArrendatarioAvax": "0.05"
+      },
+      "hashDato": "0x312c46dafa07f2c40476c12cb14cdb22ec69c2dea3780b55425e25b2e7b04c8d",
+      "dato": {
+        "ruta": "/datos/fuji/0x6a84f4eb05f415ab414ca593e07b80728491ea15/1.json",
+        "url": "https://power.larc.nasa.gov/api/temporal/monthly/point?parameters=PRECTOTCORR_SUM&community=AG&longitude=-64.13&latitude=-25.12&start=2024&end=2025&format=JSON",
+        "coincideHash": true
+      },
+      "cuentas": {
+        "dueno": "0x7886feDe3654F87CB7c5ce5910431404767A634A",
+        "arrendatario": "0x2649593daD167e8C76d6408fAf7682FDEdDBb51e",
+        "relayer": "0x9FB4fe8c514c19a4D9D851f32b7546136377D3e2"
+      },
+      "links": {
+        "crear": "https://explorer-test.avax.network/c-chain/tx/0x8c6f3e45c96fb3e50fdefe3a207276663cfaac0f39b010b7d7399fad7ea7451d",
+        "depositar": "https://explorer-test.avax.network/c-chain/tx/0xe02b23577a3e3609300a739ea5d2d45c32ab6331db7413d950c4dd42afba8bce",
+        "liquidar": "https://explorer-test.avax.network/c-chain/tx/0x177077e71f1d0c430a381043bd6529faa1e5f1ed069c57978b65c465b24f69de"
+      }
+    },
+    {
+      "id": 2,
+      "campania": "2023/24",
+      "estado": "Liquidado",
+      "saldoAvax": "0.1",
+      "umbralBajo": 2550,
+      "umbralAlto": 3050,
+      "pctMedio": 20,
+      "pctBajo": 50,
+      "lluviaDecimasMm": 3236,
+      "reparto": {
+        "pctArrendatario": 0,
+        "alDuenoAvax": "0.1",
+        "alArrendatarioAvax": "0.0"
+      },
+      "hashDato": "0x5b3de2e1a3f21f96c3ef99504cf50cb17ce4a03d7f868fd1aaad75d4e88eb1da",
+      "dato": {
+        "ruta": "/datos/fuji/0x6a84f4eb05f415ab414ca593e07b80728491ea15/2.json",
+        "url": "https://power.larc.nasa.gov/api/temporal/monthly/point?parameters=PRECTOTCORR_SUM&community=AG&longitude=-64.13&latitude=-25.12&start=2023&end=2024&format=JSON",
+        "coincideHash": true
+      },
+      "cuentas": {
+        "dueno": "0x7886feDe3654F87CB7c5ce5910431404767A634A",
+        "arrendatario": "0x2649593daD167e8C76d6408fAf7682FDEdDBb51e",
+        "relayer": "0x9FB4fe8c514c19a4D9D851f32b7546136377D3e2"
+      },
+      "links": {
+        "crear": "https://explorer-test.avax.network/c-chain/tx/0xfdca5d29e5b2303a64f6920a29dc8b2a03a24a59b43d5f911f5dd9bd71cba433",
+        "depositar": "https://explorer-test.avax.network/c-chain/tx/0x256a89c5c3282041f1b9b690159b784443c7e237c24145892a3f25302172157d",
+        "liquidar": "https://explorer-test.avax.network/c-chain/tx/0x03095ac73e0630bade317002dfb3ceec01c092f1204cf3256b6fea2a30fbe940"
+      }
+    }
+  ]
 }
