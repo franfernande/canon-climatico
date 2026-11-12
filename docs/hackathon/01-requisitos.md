@@ -6,7 +6,6 @@ Fuentes: la portada del [sitio del track](https://avalanche-track.vercel.app/), 
 
 - 11, 12 y 13 de noviembre de 2026, en el Centro de Convenciones de Salta.
 - Cuatro tracks: Rovers, Blockchain, Big Data y Streaming (estos dos últimos, de QualyData). «Cada equipo elige un único track y trabaja sobre él durante todo el evento.»
-  > Nota del equipo: según lo que hablamos con la organización, podemos presentarnos en dos tracks (Radar Narrativas en QualyData y Canon Climático en Avalanche). Conviene tener esa confirmación por escrito, porque el reglamento y el sitio del track dicen lo contrario.
 - El track Blockchain lo organizan Avalanche y Team1 LATAM, con Oracle en el premio.
 
 Agenda publicada en el sitio del hackathon («Los horarios detallados se publicarán antes del evento»):

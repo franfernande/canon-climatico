@@ -7,7 +7,7 @@ El arrendatario deposita el saldo del alquiler en un contrato en Avalanche al fi
 Track Blockchain de Avalanche · Hackathon Argentina Space 2026 · Salta, 11 al 13 de noviembre.
 Categoría principal: RWA (activos del mundo real), cruzada con Geoespacial.
 
-> Estado: idea validada y diseño cerrado. El código se escribe el jueves 12.
+> Estado: el contrato, los tests, el relayer y el verificador están listos y probados en una red local. Falta desplegar en Fuji y hacer la página, el deck y el video.
 
 Requisitos, pautas y recursos del track, tal como los publicó la organización: [docs/hackathon/](docs/hackathon/README.md).
 
@@ -50,6 +50,8 @@ Para reproducir los números:
 https://power.larc.nasa.gov/api/temporal/monthly/point?parameters=PRECTOTCORR_SUM&community=AG&longitude=-64.13&latitude=-25.12&start=2004&end=2025&format=JSON
 ```
 
+La respuesta declara `"units": "mm/day"`, pero cada valor mensual es el total del mes en milímetros: la lluvia diaria de diciembre de 2024 suma los mismos 47,24 mm que trae el dato mensual.
+
 La lluvia de diciembre más enero, en 21 campañas (2004/05 a 2024/25), va de 240,2 mm a 419,3 mm, con una mediana de 305,2 mm.
 
 Tramos del ejemplo, con umbrales calculados sobre la historia de esa misma fuente:
@@ -72,10 +74,10 @@ El umbral sale de la historia de la misma fuente porque las fuentes no coinciden
 | 2004/05 | 240,2 | 2011/12 | 308,1 | 2018/19 | 305,2 |
 | 2005/06 | 335,9 | 2012/13 | 266,7 | 2019/20 | 371,9 |
 | 2006/07 | 419,3 | 2013/14 | 362,3 | 2020/21 | 248,1 |
-| 2007/08 | 393,4 | 2014/15 | 286,9 | 2021/22 | 344,8 |
+| 2007/08 | 393,4 | 2014/15 | 287,0 | 2021/22 | 344,8 |
 | 2008/09 | 304,5 | 2015/16 | 305,2 | 2022/23 | 254,4 |
 | 2009/10 | 260,9 | 2016/17 | 240,6 | 2023/24 | 323,6 |
-| 2010/11 | 344,9 | 2017/18 | 317,2 | 2024/25 | 243,2 |
+| 2010/11 | 344,9 | 2017/18 | 317,3 | 2024/25 | 243,2 |
 
 </details>
 
@@ -83,7 +85,7 @@ El umbral sale de la historia de la misma fuente porque las fuentes no coinciden
 
 1. **¿Quién desconfía de quién?** El dueño teme no cobrar el saldo en un año malo. El arrendatario teme pagar el alquiler entero en una sequía, o que el dueño no le devuelva su parte.
 2. **¿Qué evento queda en la cadena?** Al cierre de la ventana, el contrato reparte el depósito según la lluvia.
-3. **¿Qué pasa si el dato miente?** La fuente, el punto, la ventana y los umbrales se fijan al crear el contrato y quedan públicos. El relayer publica la lluvia junto con el hash SHA-256 de la respuesta original de NASA POWER, y cualquiera puede volver a pedirla y rehacer la suma. En el MVP hay un solo relayer. Más adelante habrá dos fuentes o varios relayers, con un plazo para disputar.
+3. **¿Qué pasa si el dato miente?** La fuente, el punto, la ventana, los umbrales y la dirección del relayer se fijan al crear el contrato y quedan públicos. El arrendatario los acepta al depositar. El relayer publica la lluvia junto con el hash SHA-256 de la respuesta de NASA POWER que guardó, y cualquiera puede comprobar tres cosas: que el archivo publicado tiene ese hash, que sus valores coinciden con un pedido nuevo a NASA POWER y que diciembre más enero da la lluvia que recibió el contrato. El hash no impide que el relayer mienta, pero deja la mentira a la vista y firmada por su dirección. En el MVP hay un solo relayer. Más adelante habrá dos fuentes o varios relayers, con un plazo para disputar.
 4. **¿Quién paga y quién cobra?** El arrendatario paga una comisión por contrato, porque es quien compra la protección. Cobra Canon Climático. El monto es un supuesto que hay que validar con usuarios.
 
 La comparación para la slide: con una cláusula en papel, el reparto depende de que dos partes con intereses opuestos se pongan de acuerdo después de la sequía. Con el contrato, la regla queda escrita al firmar y la plata ya está adentro.
@@ -96,6 +98,7 @@ La comparación para la slide: con una cláusula en papel, el reparto depende de
 | Aparcería (porcentaje de la cosecha) | Depende de lo que el arrendatario declare que cosechó |
 | Cláusula climática del modelo CREA | Las hectáreas o el ajuste se acuerdan después del evento |
 | Teoría de la imprevisión | Es un reclamo, lento y caro |
+| Depósito en garantía con un tercero (escribano o fideicomiso) | El tercero custodia la plata, aplica la regla y cobra por hacerlo |
 
 ## Modelo de negocio
 
@@ -110,14 +113,14 @@ La comparación para la slide: con una cláusula en papel, el reparto depende de
 
 Cada contrato de alquiler guarda:
 
-- el dueño y el arrendatario;
+- el dueño, el arrendatario y el relayer autorizado a liquidar;
 - el saldo a depositar;
 - el punto del lote, con latitud y longitud multiplicadas por 10.000;
 - la fuente del dato, como texto (por ejemplo, `NASA POWER PRECTOTCORR_SUM`);
 - el inicio y el fin de la ventana;
 - el plazo para depositar;
 - los dos umbrales, en décimas de milímetro (255 mm se guarda como `2550`);
-- el porcentaje que vuelve al arrendatario en cada tramo;
+- el porcentaje que vuelve al arrendatario en el tramo medio y en el tramo bajo (en el tramo alto no vuelve nada);
 - el estado: creado, depositado, liquidado o cancelado.
 
 | Función | Quién la llama | Qué hace |
@@ -135,13 +138,16 @@ En producción, el plazo para depositar vence antes de que empiece la ventana, p
 
 ## Relayer
 
-`scripts/relayer.ts`, con [viem](https://viem.sh):
+`scripts/relayer.ts`, con [ethers v6](https://docs.ethers.org/v6/):
 
-1. Pide a NASA POWER los meses de la ventana para el punto del contrato.
-2. Guarda la respuesta original en `sample-data/`.
-3. Calcula el SHA-256 de esos bytes.
-4. Suma la lluvia de los meses y la pasa a décimas de milímetro.
-5. Llama a `liquidar` en Fuji.
+1. Lee del contrato el punto y la ventana.
+2. Pide a NASA POWER la lluvia mensual de esos años para el punto.
+3. Guarda la respuesta tal como llegó en `sample-data/`.
+4. Calcula el SHA-256 de esos bytes.
+5. Suma la lluvia de los meses de la ventana y la redondea a décimas de milímetro, con los medios hacia arriba (286,95 mm queda en 287,0).
+6. Llama a `liquidar` en Fuji.
+
+Dos pedidos iguales a NASA POWER devuelven la misma lluvia pero no los mismos bytes, porque la respuesta trae el tiempo de proceso del servidor en el campo `times`. Por eso el hash se compara contra el archivo guardado, y los valores contra un pedido nuevo. `scripts/verificar.ts` hace las dos cosas.
 
 ## Demo (video de 1 a 3 minutos)
 
@@ -149,7 +155,7 @@ En producción, el plazo para depositar vence antes de que empiece la ventana, p
 | --- | --- |
 | 0:00 a 0:20 | El problema: un lote en Anta y la sequía de 2024/25 |
 | 0:20 a 1:10 | Dos contratos con datos reales en el explorer de Fuji. En 2024/25 llovieron 243,2 mm y el saldo se reparte mitad y mitad. En 2023/24 llovieron 323,6 mm y todo va al dueño |
-| 1:10 a 1:40 | Por qué blockchain, y la verificación del hash del JSON de NASA POWER |
+| 1:10 a 1:40 | Por qué blockchain, y la verificación: el hash del JSON guardado coincide con el de la transacción, y sus valores con un pedido nuevo a NASA POWER |
 
 La campaña 2022/23 dio 254,4 mm, a 0,6 mm del umbral bajo. No la usamos en la demo. Sirve para explicar por qué el umbral se escribe en décimas y con la fuente.
 
@@ -168,16 +174,57 @@ Queda afuera:
 - Login.
 - Medir la superficie efectivamente sembrada con imágenes satelitales.
 
-## Estructura planificada
+## Estructura
 
 ```
 contracts/CanonClimatico.sol      contrato
-test/CanonClimatico.ts            tests con Hardhat 3 + viem
-ignition/modules/CanonClimatico.ts
-scripts/relayer.ts                NASA POWER -> hash -> liquidar()
-sample-data/                      respuestas originales de NASA POWER
-web/                              página de la demo
+test/CanonClimatico.ts            tests del contrato, con Hardhat 3 y ethers v6
+test/power.ts                     tests del cálculo de la lluvia
+scripts/lib/power.ts              NASA POWER: URL, meses de la ventana, suma y SHA-256
+scripts/deploy.ts                 despliega y guarda la dirección y el ABI en deployments/
+scripts/demo.ts                   crea y deposita los contratos de 2024/25 y 2023/24
+scripts/relayer.ts                NASA POWER -> sample-data -> hash -> liquidar()
+scripts/verificar.ts              compara el hash, los valores y la suma, sin claves
+deployments/fuji.json             dirección, ABI y transacciones en Fuji
+sample-data/                      respuestas de NASA POWER
+web/                              página de la demo (pendiente)
 ```
+
+## Cómo correrlo
+
+Necesita Node 22 o superior.
+
+```
+npm install
+npm test
+```
+
+Los tests usan la historia real de NASA POWER guardada en `sample-data/nasa-power-anta-2004-2025.json`. Comprueban la lluvia de las 21 campañas de la tabla, el reparto de cada tramo y los controles del contrato.
+
+### En Fuji
+
+1. Creá tres cuentas en Core Wallet, en modo testnet: el relayer (también despliega), el dueño y el arrendatario. Tienen que ser distintas.
+2. Pedí AVAX de prueba en el faucet para la cuenta del relayer. Con 0,5 AVAX alcanza: el script de la demo le pasa al dueño y al arrendatario lo que necesitan.
+3. Cargá las tres claves privadas en el keystore de Hardhat, que las guarda cifradas fuera del repo:
+
+   ```
+   npx hardhat keystore set FUJI_PRIVATE_KEY
+   npx hardhat keystore set FUJI_DUENO_KEY
+   npx hardhat keystore set FUJI_ARRENDATARIO_KEY
+   ```
+
+   También se pueden pasar como variables de entorno con esos mismos nombres. Nunca las subas al repo.
+4. Desplegá, creá los dos contratos de la demo, liquidalos y verificá:
+
+   ```
+   npm run deploy:fuji
+   npm run demo:fuji
+   npm run relayer:fuji
+   npm run verificar -- 1
+   npm run verificar -- 2
+   ```
+
+Cada script imprime los links al explorer. La dirección, el ABI y las transacciones quedan en `deployments/fuji.json`, y la respuesta de NASA POWER que usó el relayer, en `sample-data/fuji/<contrato>/<id>.json`. Si NASA POWER no responde, el relayer puede usar una respuesta ya guardada: en PowerShell, `$env:ARCHIVO="ruta.json"; npm run relayer:fuji`. Con `$env:IDS="1"` liquida solo ese contrato.
 
 ## Plan de trabajo
 
@@ -206,7 +253,7 @@ La lista completa y la checklist de la guía están en [docs/hackathon/01-requis
 
 ## Supuestos y límites
 
-- Es un índice, no una medición del lote. La lluvia del punto de NASA POWER puede no ser la que cayó en cada hectárea.
+- Es un índice, no una medición del lote. NASA POWER entrega la lluvia en una grilla de 0,5° de latitud por 0,625° de longitud (MERRA-2), así que el punto representa una zona de decenas de kilómetros y puede no coincidir con lo que cayó en cada hectárea.
 - La ventana de diciembre y enero para soja en Anta hay que confirmarla con un productor.
 - Que dueños y arrendatarios acepten una stablecoin es un supuesto.
 - En el MVP hay un solo relayer.
