@@ -161,7 +161,7 @@ export default function Deck() {
           <li>
             <code>liquidar</code>
             <span>El relayer publica la lluvia y el hash del dato.</span>
-            <span className={s.donde}>Script del relayer, sin pantalla</span>
+            <span className={s.donde}>Relayer, solo cuando cierra la ventana</span>
           </li>
           <li>
             <code>retirar</code>
@@ -235,8 +235,8 @@ export default function Deck() {
             <span className={s.botonFalso}>Depositar y aceptar</span>
           </li>
           <li>
-            <strong>4. Pantalla de cobro</strong>
-            <span>Después del relayer, cada uno retira lo suyo.</span>
+            <strong>4. Liquidar y cobrar</strong>
+            <span>Al cerrar la ventana, el relayer publica la lluvia y cada uno retira lo suyo.</span>
             <span className={s.botonFalso}>Retirar</span>
           </li>
         </ol>

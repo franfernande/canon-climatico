@@ -8,6 +8,9 @@ export const FUJI = {
   rpc: "https://api.avax-test.network/ext/bc/C/rpc",
 };
 
+/** Igual que PLAZO_LIQUIDACION en el contrato: después, cualquiera puede llamar a reembolsar. */
+export const PLAZO_LIQUIDACION_S = 60 * 24 * 3600;
+
 export const ESTADOS = ["Creado", "Depositado", "Liquidado", "Cancelado", "Reembolsado"] as const;
 export type EstadoAlquiler = (typeof ESTADOS)[number];
 

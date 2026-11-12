@@ -603,6 +603,13 @@
       "lluviaDecimasMm": 3236,
       "hashDato": "0x5b3de2e1a3f21f96c3ef99504cf50cb17ce4a03d7f868fd1aaad75d4e88eb1da",
       "archivo": "sample-data/fuji/0x6a84f4eb05f415ab414ca593e07b80728491ea15/2.json"
+    },
+    {
+      "id": 3,
+      "tx": "0xa6d538c0cd497e0f519260d493880a6efe472c18728c85ae9a205c227b42d19c",
+      "lluviaDecimasMm": 2870,
+      "hashDato": "0xa526960f550cef56ee8ea16b34ce9c3e9713493d2f1b804cb2e0ae0090b31099",
+      "archivo": "sample-data/fuji/0x6a84f4eb05f415ab414ca593e07b80728491ea15/3.json"
     }
   ],
   "retiros": [

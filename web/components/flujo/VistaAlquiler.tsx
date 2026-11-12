@@ -9,6 +9,7 @@ import {
   explicarError,
   fecha,
   leerAlquiler,
+  PLAZO_LIQUIDACION_S,
   proveedorDeLectura,
   reparto,
 } from "@/lib/cadena";
@@ -24,6 +25,7 @@ export function VistaAlquiler({ id }: { id: number }) {
   const [a, setA] = useState<AlquilerEnCadena | null>(null);
   const [saldoArrendatario, setSaldoArrendatario] = useState<bigint | null>(null);
   const [error, setError] = useState<string | null>(null);
+  const [relayer, setRelayer] = useState<EstadoRelayer>({ fase: "libre" });
 
   const cargar = useCallback(async () => {
     try {
@@ -47,7 +49,22 @@ export function VistaAlquiler({ id }: { id: number }) {
   if (!a) return <p className={error ? s.error : s.espera}>{error ?? "Leyendo el alquiler en Fuji…"}</p>;
 
   const esArrendatario = cuenta?.toLowerCase() === a.arrendatario.toLowerCase();
-  const vencido = Date.now() / 1000 > a.plazoDeposito;
+  const ahora = Date.now() / 1000;
+  const vencido = ahora > a.plazoDeposito;
+  const ventanaAbierta = ahora < a.finVentana;
+  const finReembolso = a.finVentana + PLAZO_LIQUIDACION_S;
+
+  async function liquidar() {
+    setRelayer({ fase: "corriendo" });
+    try {
+      const respuesta = await fetch(`/api/relayer/${id}`, { method: "POST" });
+      const r = (await respuesta.json()) as { ok: boolean; tx?: string; salida?: string; error?: string };
+      setRelayer({ fase: r.ok ? "lista" : "error", tx: r.tx, salida: r.salida, error: r.error });
+    } catch (e) {
+      setRelayer({ fase: "error", error: explicarError(e) });
+    }
+    await cargar();
+  }
   const umbrales = { bajo: a.umbralBajo, alto: a.umbralAlto };
 
   async function depositar() {
@@ -121,6 +138,13 @@ export function VistaAlquiler({ id }: { id: number }) {
             <div>
               <dt>Plazo para depositar</dt>
               <dd>{fecha(a.plazoDeposito)}</dd>
+            </div>
+            <div>
+              <dt>Liquidación</dt>
+              <dd>
+                Desde el {fecha(a.finVentana)}, cuando termina la ventana. Si nadie liquida, desde el{" "}
+                {fecha(finReembolso)} cualquiera puede reembolsar.
+              </dd>
             </div>
             <div>
               <dt>Contrato</dt>
@@ -198,18 +222,39 @@ export function VistaAlquiler({ id }: { id: number }) {
             <EstadoTransaccion {...tx} />
             <h2>El saldo está en custodia</h2>
             <p>
-              El contrato tiene {avax(formatEther(a.saldo))}. Cuando cierre la ventana, el relayer le pide la lluvia a
-              NASA POWER y la publica. En la demo se corre en la terminal:
+              El contrato tiene {avax(formatEther(a.saldo))}. El relayer solo puede liquidar cuando termina la ventana
+              acordada en el contrato: desde el <strong>{fecha(a.finVentana)}</strong>. En el producto corre solo y
+              liquida automáticamente al cierre. Si no lo hiciera, a los 60 días (desde el {fecha(finReembolso)})
+              cualquiera puede reembolsar, y el saldo se reparte según el tramo medio.
             </p>
-            <pre className={s.codigo}>
-              $env:IDS=&quot;{id}&quot;; npm run relayer:fuji
-            </pre>
-            <p className={s.nota}>Esta pantalla se actualiza sola cuando llega la liquidación.</p>
+            {ventanaAbierta ? (
+              <p className={s.aviso}>La ventana sigue abierta: el botón se habilita el {fecha(a.finVentana)}.</p>
+            ) : (
+              config.modoDemo && (
+                <p className={s.nota}>Esta campaña ya cerró (el contrato está en modo demo), así que se puede liquidar ahora.</p>
+              )
+            )}
+            <button
+              type="button"
+              className={s.boton}
+              disabled={ventanaAbierta || relayer.fase === "corriendo"}
+              onClick={liquidar}
+            >
+              Liquidar con la lluvia de NASA POWER
+            </button>
+            <p className={s.nota}>
+              En la demo, el botón corre el relayer en la PC que sirve la página, con la clave del relayer de su{" "}
+              <code>.env</code>. Nadie más puede liquidar: el contrato solo acepta esa dirección.
+            </p>
+            <SalidaRelayer {...relayer} explorer={config.explorer} />
           </>
         )}
 
         {a.estado === "Liquidado" && (
-          <Liquidacion a={a} umbrales={umbrales} />
+          <>
+            <SalidaRelayer {...relayer} explorer={config.explorer} />
+            <Liquidacion a={a} umbrales={umbrales} />
+          </>
         )}
 
         {(a.estado === "Cancelado" || a.estado === "Reembolsado") && (
@@ -222,6 +267,30 @@ export function VistaAlquiler({ id }: { id: number }) {
         )}
       </section>
     </>
+  );
+}
+
+type EstadoRelayer = { fase: "libre" | "corriendo" | "lista" | "error"; tx?: string; salida?: string; error?: string };
+
+function SalidaRelayer({ fase, tx, salida, error, explorer }: EstadoRelayer & { explorer: string }) {
+  if (fase === "libre") return null;
+  return (
+    <div className={s.salidaRelayer} role="status">
+      {fase === "corriendo" && (
+        <p className={s.espera}>Pidiendo la lluvia a NASA POWER y publicándola en Fuji… tarda unos segundos.</p>
+      )}
+      {fase === "lista" && tx && (
+        <p className={s.ok}>
+          Liquidado por el relayer:{" "}
+          <a href={tx.startsWith("http") ? tx : `${explorer}/tx/${tx}`} target="_blank" rel="noreferrer">
+            ver la transacción en el explorer
+          </a>
+          .
+        </p>
+      )}
+      {fase === "error" && <p className={s.error}>{error}</p>}
+      {salida && <pre className={s.codigo}>{salida}</pre>}
+    </div>
   );
 }
 

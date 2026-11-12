@@ -45,7 +45,8 @@ Escrow de saldo de alquiler rural en Avalanche Fuji. El arrendatario deposita el
 | --- | --- | --- | --- | --- |
 | 1 | 2024/25 | 243,2 mm | 50/50 | 3 OK |
 | 2 | 2023/24 | 323,6 mm | 100 % dueño | 3 OK |
-| 3 | 2014/15 | 287,0 mm esperados (120,22 + 166,73 = 286,95) | 80/20 | **Depositado** el 12/11; se liquida en vivo en la toma |
+| 3 | 2014/15 | 287,0 mm (120,22 + 166,73 = 286,95) | 80/20 | Liquidado el 12/11 a la tarde desde esta PC (tx `0xa6d538…d19c`); falta `retirar` (0,08 y 0,02) y `verificar -- 3` |
+| 4 | 2014/15 | — | 80/20 | Creado y depositado desde las pantallas (saldo 0,005); es el que se liquida con el botón en el video |
 
 Retiros: dueño 0,15 AVAX; arrendatario 0,05 AVAX (pago por pull: `liquidar` anota; `retirar` mueve la plata).
 
@@ -130,6 +131,7 @@ sample-data/                   respuestas NASA (tratar como binary; ver .gitattr
 ## Decisiones que no hay que reabrir sin pedido
 
 - Relayer propio (no Chainlink Functions) + commit de hash + verificador off-chain.
+- El botón «Liquidar» de `/alquiler/<id>` llama a `POST /api/relayer/<id>` (`web/app/api/relayer/[id]/route.ts`), que corre `npm run relayer:fuji` con `IDS=<id>` en la raíz y después `npm run web:datos`. Solo con `npm run dev` o `RELAYER_DESDE_WEB=1`; necesita el `.env` de la raíz. La pantalla dice que se liquida al fin de la ventana y que a los 60 días se puede reembolsar.
 - La home y el deck son estáticos, alimentados por el export. Las pantallas con wallet (`/proceso`, `/crear`, `/alquiler/<id>`, `/cobrar`, en `web/app/(flujo)/`) las pidió el usuario el 12/11: firman desde Core o MetaMask con las tres cuentas de la demo fijas (no se pueden editar). El relayer sigue en la terminal.
 - Campañas de demo: 2024/25 (seca) y 2023/24 (normal), más 2014/15 (tramo medio), que se liquida en vivo en el video. El #3 lo pidió el usuario el 12/11.
 - Umbrales 2550/3050 décimas; `pctMedio` 20; `pctBajo` 50.

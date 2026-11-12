@@ -1,6 +1,6 @@
 {
   "red": "fuji",
-  "generado": "2026-11-12T17:58:10.319Z",
+  "generado": "2026-11-12T19:31:00.052Z",
   "explorer": "https://explorer-test.avax.network/c-chain",
   "fuente": "NASA POWER PRECTOTCORR_SUM",
   "punto": {
@@ -756,8 +756,40 @@
     {
       "id": 3,
       "campania": "2014/15",
-      "estado": "Depositado",
+      "estado": "Liquidado",
       "saldoAvax": "0.1",
+      "umbralBajo": 2550,
+      "umbralAlto": 3050,
+      "pctMedio": 20,
+      "pctBajo": 50,
+      "lluviaDecimasMm": 2870,
+      "reparto": {
+        "pctArrendatario": 20,
+        "alDuenoAvax": "0.08",
+        "alArrendatarioAvax": "0.02"
+      },
+      "hashDato": "0xa526960f550cef56ee8ea16b34ce9c3e9713493d2f1b804cb2e0ae0090b31099",
+      "dato": {
+        "ruta": "/datos/fuji/0x6a84f4eb05f415ab414ca593e07b80728491ea15/3.json",
+        "url": "https://power.larc.nasa.gov/api/temporal/monthly/point?parameters=PRECTOTCORR_SUM&community=AG&longitude=-64.13&latitude=-25.12&start=2014&end=2015&format=JSON",
+        "coincideHash": true
+      },
+      "cuentas": {
+        "dueno": "0x7886feDe3654F87CB7c5ce5910431404767A634A",
+        "arrendatario": "0x2649593daD167e8C76d6408fAf7682FDEdDBb51e",
+        "relayer": "0x9FB4fe8c514c19a4D9D851f32b7546136377D3e2"
+      },
+      "links": {
+        "crear": "https://explorer-test.avax.network/c-chain/tx/0x958ea9083fdf5ea5baf97002ea30900a9674a0bf7b159115518e88e4936bb47d",
+        "depositar": "https://explorer-test.avax.network/c-chain/tx/0x3eadacf3441d480e2167dc5f94a16d573acd8e8a3236268aa1d7972448f6fc38",
+        "liquidar": "https://explorer-test.avax.network/c-chain/tx/0xa6d538c0cd497e0f519260d493880a6efe472c18728c85ae9a205c227b42d19c"
+      }
+    },
+    {
+      "id": 4,
+      "campania": "2014/15",
+      "estado": "Depositado",
+      "saldoAvax": "0.005",
       "umbralBajo": 2550,
       "umbralAlto": 3050,
       "pctMedio": 20,
@@ -772,8 +804,8 @@
         "relayer": "0x9FB4fe8c514c19a4D9D851f32b7546136377D3e2"
       },
       "links": {
-        "crear": "https://explorer-test.avax.network/c-chain/tx/0x958ea9083fdf5ea5baf97002ea30900a9674a0bf7b159115518e88e4936bb47d",
-        "depositar": "https://explorer-test.avax.network/c-chain/tx/0x3eadacf3441d480e2167dc5f94a16d573acd8e8a3236268aa1d7972448f6fc38",
+        "crear": null,
+        "depositar": null,
         "liquidar": null
       }
     }

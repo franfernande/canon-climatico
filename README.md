@@ -275,10 +275,12 @@ En `/proceso` empieza el flujo con wallets, que sí firma transacciones en Fuji 
 
 1. `/proceso`: conectar la wallet y ver las tres cuentas de la demo y los alquileres del contrato.
 2. `/crear`: el dueño elige la campaña, el saldo, los umbrales y los porcentajes, y firma `crear`. Le queda un link para el arrendatario.
-3. `/alquiler/<id>`: el arrendatario lee las condiciones desde la cadena y firma `depositar`. Cuando el relayer liquida (en la terminal), la pantalla se actualiza sola.
+3. `/alquiler/<id>`: el arrendatario lee las condiciones desde la cadena y firma `depositar`. La pantalla muestra desde cuándo se puede liquidar (el fin de la ventana) y desde cuándo se puede reembolsar (60 días después). El botón «Liquidar con la lluvia de NASA POWER» se habilita al cerrar la ventana y corre `scripts/relayer.ts` para ese alquiler en la PC que sirve la página, con la clave del `.env` de la raíz; después regenera los datos de la página. La pantalla se actualiza sola.
 4. `/cobrar`: cada parte ve lo que tiene para cobrar y firma `retirar`.
 
-En esta versión de prueba las direcciones del dueño, el arrendatario y el relayer están fijas: son las de los alquileres de la demo. Para cada paso hay que elegir en la wallet la cuenta que corresponde, así que el dueño y el arrendatario tienen que estar importados en ella. Antes de abrir la wallet, cada operación se simula contra la cadena; si el contrato la rechazaría, la pantalla explica por qué y no pide la firma.
+En esta versión de prueba las direcciones del dueño, el arrendatario y el relayer están fijas: son las de los alquileres de la demo. Para cada paso hay que elegir en la wallet la cuenta que corresponde, así que el dueño y el arrendatario tienen que estar importados en ella. El botón del relayer usa la ruta `POST /api/relayer/<id>`, que solo funciona con `npm run dev` (en producción hay que definir `RELAYER_DESDE_WEB=1`): la clave del relayer queda en el servidor y el contrato solo acepta la liquidación de esa dirección. En el producto, el relayer correría solo al cierre de cada ventana.
+
+Antes de abrir la wallet, cada operación se simula contra la cadena; si el contrato la rechazaría, la pantalla explica por qué y no pide la firma.
 
 En `/deck` está el pitch en 7 slides de 1280 × 720, armado con los mismos datos y componentes. Para el PDF, con la página andando (`npm run build` y `npx next start -p 3210` dentro de `web/`), imprimila con Edge sin abrir ventana:
 
