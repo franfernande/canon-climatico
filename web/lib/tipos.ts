@@ -9,7 +9,7 @@ export type Campania = {
 export type AlquilerWeb = {
   id: number;
   campania: string;
-  estado: "Creado" | "Depositado" | "Liquidado" | "Cancelado";
+  estado: "Creado" | "Depositado" | "Liquidado" | "Cancelado" | "Reembolsado";
   saldoAvax: string;
   umbralBajo: number;
   umbralAlto: number;
@@ -32,6 +32,6 @@ export type DatosWeb = {
   punto: { latitud: number; longitud: number };
   umbrales: { bajo: number; alto: number };
   historia: Campania[];
-  contrato: { direccion: string; link: string; linkDespliegue: string } | null;
+  contrato: { direccion: string; link: string; linkDespliegue: string; modoDemo?: boolean } | null;
   alquileres: AlquilerWeb[];
 };

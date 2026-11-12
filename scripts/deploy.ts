@@ -4,8 +4,13 @@ import { guardarDespliegue, linkDireccion, linkTx, rutaDespliegue } from "./lib/
 const { ethers, networkName } = await network.create();
 const [relayer] = await ethers.getSigners();
 
+// Modo demo: deja usar campañas pasadas. Con MODO_DEMO=false el contrato exige que el plazo
+// para depositar venza antes de que empiece la ventana.
+const modoDemo = process.env.MODO_DEMO?.trim().toLowerCase() !== "false";
+
 console.log(`Desplegando CanonClimatico en ${networkName} desde ${relayer.address}`);
-const canon = await ethers.deployContract("CanonClimatico", [], relayer);
+console.log(`Modo demo: ${modoDemo ? "sí (acepta campañas pasadas)" : "no"}`);
+const canon = await ethers.deployContract("CanonClimatico", [modoDemo], relayer);
 await canon.waitForDeployment();
 
 const tx = canon.deploymentTransaction();
@@ -21,9 +26,11 @@ guardarDespliegue({
   direccion,
   txDespliegue: tx.hash,
   bloque: recibo.blockNumber,
+  modoDemo,
   abi: JSON.parse(canon.interface.formatJson()),
   alquileres: [],
   liquidaciones: [],
+  retiros: [],
 });
 
 console.log(`Contrato:  ${direccion}`);

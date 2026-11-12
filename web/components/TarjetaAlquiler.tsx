@@ -46,6 +46,11 @@ export function TarjetaAlquiler({ a }: { a: AlquilerWeb }) {
             </div>
           </dl>
         </>
+      ) : a.estado === "Reembolsado" && a.reparto ? (
+        <p className="tarjeta__espera">
+          El relayer no liquidó a tiempo y el saldo se repartió según el tramo medio: {avax(a.reparto.alDuenoAvax)} al
+          dueño y {avax(a.reparto.alArrendatarioAvax)} al arrendatario.
+        </p>
       ) : (
         <p className="tarjeta__espera">
           {a.estado === "Depositado"

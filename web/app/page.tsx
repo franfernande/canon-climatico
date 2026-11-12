@@ -70,6 +70,8 @@ export default function Inicio() {
           {contrato ? (
             <p>
               Contrato <a href={contrato.link}>{corto(contrato.direccion)}</a> en {datos.red === "fuji" ? "Fuji C-Chain" : datos.red}.
+              {contrato.modoDemo &&
+                " Está en modo demo para poder usar campañas pasadas: en producción no se puede depositar después de que empieza la ventana."}
             </p>
           ) : (
             <p className="aviso">El contrato todavía no está desplegado en Fuji.</p>
