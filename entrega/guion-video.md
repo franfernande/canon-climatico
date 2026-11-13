@@ -1,11 +1,18 @@
 # Guion del video: pitch y demo (máximo 3 minutos)
 
-El video junta el pitch (slides del deck) y la demo en vivo en Fuji, sobre la versión publicada en Vercel. La demo recorre las cuatro pantallas en el orden de la barra de pasos, y cada parte firma desde su propia wallet en MetaMask: el dueño crea, el arrendatario deposita, el relayer liquida con la lluvia de NASA y cada uno cobra. La voz suma unas 430 palabras, unos 2:50 a ritmo normal: hay que cortar en la edición las esperas de MetaMask y de Fuji.
+El video junta el pitch (slides del deck) y la demo en vivo en Fuji, grabada en local (`localhost`): en la versión de Vercel, MetaMask muestra una advertencia de phishing por ser un subdominio nuevo de `vercel.app`. La demo recorre las cuatro pantallas en el orden de la barra de pasos, y cada parte firma desde su propia wallet en MetaMask: el dueño crea, el arrendatario deposita, el relayer liquida con la lluvia de NASA y cada uno cobra. La voz suma unas 430 palabras, unos 2:50 a ritmo normal: hay que cortar en la edición las esperas de MetaMask y de Fuji.
 
 ## Cómo grabarlo
 
 1. **Slides:** abrir `entrega/agrorenta-pitch.pdf` en Firefox y pasar a modo presentación (botón «>>» → «Modo presentación», o Ctrl+Alt+P). Se avanza con la flecha derecha.
-2. **Demo:** en otra pestaña, la dirección de Vercel con `/proceso` al final (por ejemplo `https://agrorenta.vercel.app/proceso`). También sirve `http://localhost:3000/proceso` con `npm run dev` corriendo en `web`; en local, el JSON de NASA se guarda solo en el repo al liquidar.
+2. **Demo:** levantar la web en una PowerShell (un comando por línea; PowerShell no acepta `&&`):
+
+   ```powershell
+   cd C:\proyects\canon-climatico\web
+   npm run dev
+   ```
+
+   y abrir `http://localhost:3000/proceso` en otra pestaña de Firefox (no la dirección `192.168…`). Al liquidar, el JSON de NASA se guarda solo en el repo.
 3. **Grabar la pantalla entera**, no solo la ventana de Firefox, porque las ventanas de MetaMask se abren aparte. Sirve la Herramienta Recortes (Win+Shift+R) u OBS. 1080p, notificaciones de Windows apagadas, Firefox al 125 % para la demo.
 4. Lo más cómodo es grabar la pantalla **sin voz** siguiendo la tabla, y después poner la voz encima en Clipchamp (viene con Windows), cortando las esperas de MetaMask y de Fuji.
 
@@ -51,20 +58,18 @@ Si el video se pasa de 3 minutos, primero acortá las esperas de la demo; despu�
 
 ## Después de grabar
 
-Si se grabó en Vercel, el JSON de NASA no queda en el repo: en la pantalla del alquiler, después de liquidar, apretá «Descargar el JSON de NASA» y guardalo como `sample-data/fuji/0x6a84f4eb05f415ab414ca593e07b80728491ea15/5.json` (con el número del alquiler). Si se grabó con `npm run dev`, ya quedó guardado.
-
-En la raíz del repo:
+Al liquidar desde `localhost`, la página ya guardó el JSON de NASA en `sample-data/` y la liquidación en `deployments/fuji.json`, y regeneró los datos de la web (la pantalla lo confirma con «Guardado en el repo»). En otra PowerShell, en la raíz del repo:
 
 ```powershell
+cd C:\proyects\canon-climatico
 npm run verificar -- 5
-npm run web:datos
 git add deployments/fuji.json sample-data/fuji/ web/data/fuji.json web/public/datos/fuji/
 git commit -m "Liquidaciones del video"
 git push origin main
 ```
 
-El push actualiza Vercel solo. Después, subir el video a YouTube como no listado.
+El push actualiza también Vercel. Después, subir el video a YouTube como no listado.
 
 ## Grabar desde otra PC
 
-Alcanza con abrir la versión publicada en Vercel y tener las tres cuentas importadas en MetaMask, autorizadas en el sitio. Las claves se pasan en persona, nunca por el repo ni por un grupo.
+Clonar el repo, correr `npm install` en la raíz y en `web`, y `npm run dev` en `web`. Hacen falta las tres cuentas importadas en MetaMask y autorizadas en el sitio; el `.env` no hace falta. Las claves se pasan en persona, nunca por el repo ni por un grupo.
