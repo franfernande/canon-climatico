@@ -108,7 +108,7 @@ export default function Deck() {
               El alquiler rural que se ajusta con la lluvia.
             </p>
             <ul className={s.portadaDatos}>
-              <li>Alquiler de campo en Anta, Salta</li>
+              <li>Campos sin riego, como en Anta, Salta</li>
               <li>Lluvia de NASA POWER</li>
               <li>Contrato en Avalanche Fuji</li>
             </ul>
@@ -123,34 +123,39 @@ export default function Deck() {
           <div>
             <h2 className={s.titulo}>Si hay sequía, el arrendatario paga el alquiler igual.</h2>
             <p className={s.contexto}>
-              En Anta, Salta, la soja se siembra sin riego. El campo se alquila a valor fijo: anticipo al firmar y saldo
-              en la cosecha.
+              El alquiler se paga con un anticipo de alrededor del 50 % antes de la siembra y el saldo después de la
+              cosecha. Un año de poca lluvia es un imprevisto para las dos partes.
             </p>
           </div>
           <div>
-            <p className={s.subtitulo}>Hoy hay tres salidas</p>
+            <p className={s.subtitulo}>Hoy se resuelve de tres maneras</p>
             <ul className={s.salidas}>
               <li>
-                <strong>Aparcería</strong>
-                <span className={s.falla}>Depende de lo que se declare cosechado</span>
+                <strong>1. Aparcería</strong>
+                <span>Se paga según lo que se coseche.</span>
+                <span className={s.falla}>Depende de lo que declare el arrendatario</span>
               </li>
               <li>
-                <strong>Cláusula climática</strong>
+                <strong>2. Cláusula climática</strong>
+                <span>Permite renegociar ante un imprevisto climático.</span>
                 <span className={s.falla}>Se negocia después de la sequía</span>
               </li>
               <li>
-                <strong>Teoría de la imprevisión</strong>
-                <span className={s.falla}>Es un juicio lento y caro</span>
+                <strong>3. Juicio por teoría de la imprevisión</strong>
+                <span className={s.falla}>Es lento y costoso</span>
               </li>
             </ul>
           </div>
         </div>
-        <p className={s.conclusion}>Ninguna se ejecuta sola.</p>
+        <p className={s.conclusion}>Ninguna de las tres es eficiente.</p>
       </Slide>
 
       <Slide n={2}>
-        <p className={s.marca}>La solución</p>
-        <h2 className={s.titulo}>El saldo va a un contrato y se reparte solo, según la lluvia.</h2>
+        <p className={s.marca}>Nuestra solución · AgroRenta</p>
+        <h2 className={s.titulo}>Un alquiler con ajuste automático por lluvia</h2>
+        <p className={s.bajada}>
+          El saldo se deposita en un contrato en Avalanche y se reparte solo, según la lluvia que mide NASA en el lote.
+        </p>
         <ol className={`tramos ${s.tramos}`}>
           <li className="tramo tramo--alto">
             <span className="tramo__lluvia">Más de {mmEntero(umbrales.alto)}</span>
@@ -202,25 +207,37 @@ export default function Deck() {
         <h2 className={s.titulo}>Por qué blockchain</h2>
         <div className={s.preguntas}>
           <div>
-            <h3>¿Quién desconfía de quién?</h3>
-            <p>El dueño teme no cobrar; el arrendatario, pagar entero en una sequía.</p>
+            <h3>1. ¿Quién desconfía de quién?</h3>
+            <p>
+              El dueño teme no cobrar el saldo; el arrendatario, pagar todo en una sequía. Por eso la plata la guarda
+              el contrato, no una de las partes.
+            </p>
           </div>
           <div>
-            <h3>¿Qué queda en la cadena?</h3>
-            <p>Las condiciones al firmar y el reparto al cerrar la ventana.</p>
+            <h3>2. ¿Qué evento dispara el pago?</h3>
+            <p>
+              El cierre de la ventana de lluvia: el relayer publica los milímetros y el contrato reparte el saldo según
+              los tramos firmados.
+            </p>
           </div>
           <div>
-            <h3>¿Y si el dato miente?</h3>
-            <p>El hash del dato queda publicado: cualquiera lo verifica, y la mentira queda firmada.</p>
+            <h3>3. ¿Y si el dato miente?</h3>
+            <p>
+              La fuente, el lote y el relayer quedan fijos al firmar. El hash del dato de NASA queda publicado:
+              cualquiera lo comprueba, y una mentira queda firmada.
+            </p>
           </div>
           <div>
-            <h3>¿Quién paga?</h3>
-            <p>El arrendatario, con una comisión por contrato.</p>
+            <h3>4. ¿Quién paga y quién cobra?</h3>
+            <p>
+              El arrendatario paga una comisión por contrato, porque compra la protección. Cobra AgroRenta. El monto es
+              un supuesto a validar.
+            </p>
           </div>
         </div>
         <p className={s.comparacion}>
-          Con una cláusula en papel, el ajuste se negocia después. Con el contrato, la regla y la plata están desde la
-          firma.
+          Con un escribano o una base de datos, alguien guarda la plata y aplica la regla. Acá las dos están en el
+          contrato desde la firma.
         </p>
       </Slide>
 
@@ -246,11 +263,17 @@ export default function Deck() {
           </div>
         </div>
         <p className={s.nota}>El monto de la comisión y el canal son supuestos a validar con usuarios.</p>
-        <p className={s.fuentes}>
-          Datos: NASA POWER, lluvia mensual corregida (PRECTOTCORR_SUM). «These data were obtained from the NASA Langley
-          Research Center (LaRC) POWER Project funded through the NASA Earth Science/Applied Science Program.» · Código:{" "}
-          <a href="https://github.com/franfernande/canon-climatico">github.com/franfernande/canon-climatico</a>
-        </p>
+        <div className={s.fuentes}>
+          <p className={s.api}>
+            Datos: API de NASA POWER, lluvia mensual corregida (PRECTOTCORR_SUM) ·{" "}
+            <a href="https://power.larc.nasa.gov/api/pages/#/">power.larc.nasa.gov/api/pages</a>
+          </p>
+          <p>
+            «These data were obtained from the NASA Langley Research Center (LaRC) POWER Project funded through the NASA
+            Earth Science/Applied Science Program.» · Código:{" "}
+            <a href="https://github.com/franfernande/canon-climatico">github.com/franfernande/canon-climatico</a>
+          </p>
+        </div>
       </Slide>
     </main>
   );

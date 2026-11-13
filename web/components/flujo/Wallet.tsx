@@ -202,7 +202,7 @@ export function Direccion({ valor }: { valor: string }) {
   const rol = rolDe(valor);
   return (
     <span className={s.direccion}>
-      <a href={`${config.explorer}/address/${valor}`} title={valor}>
+      <a href={`${config.explorer}/address/${valor}`} title={valor} target="_blank" rel="noreferrer">
         {corto(valor)}
       </a>
       {rol && <span className={`${s.rol} ${s[`rol_${rol === "dueño" ? "dueno" : rol}`]}`}>{rol}</span>}

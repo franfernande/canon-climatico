@@ -1,0 +1,14 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" width="1024" height="1024" role="img" aria-label="AgroRenta">
+  <rect width="512" height="512" rx="96" fill="#1c1d1f"/>
+  <path d="M256 62C256 62 186 146 186 196a70 70 0 0 0 140 0C326 146 256 62 256 62Z" fill="#8cc4ff"/>
+  <path d="M222 196a34 34 0 0 0 34 34" fill="none" stroke="#fff" stroke-width="10" stroke-linecap="round" opacity="0.7"/>
+  <g>
+    <polygon points="150,290 185.3,290 132,372 70,372" fill="#3f6b35"/>
+    <polygon points="185.3,290 220.7,290 194,372 132,372" fill="#6b5235"/>
+    <polygon points="220.7,290 256,290 256,372 194,372" fill="#3f6b35"/>
+    <polygon points="256,290 291.3,290 318,372 256,372" fill="#6b5235"/>
+    <polygon points="291.3,290 326.7,290 380,372 318,372" fill="#3f6b35"/>
+    <polygon points="326.7,290 362,290 442,372 380,372" fill="#6b5235"/>
+  </g>
+  <text x="256" y="452" text-anchor="middle" font-family="Segoe UI, system-ui, -apple-system, Roboto, Arial, sans-serif" font-size="66" font-weight="700" fill="#fff">Agro<tspan fill="#e84142">Renta</tspan></text>
+</svg>

@@ -319,6 +319,28 @@
   margin: 4px 0;
 }
 
+.saldos {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 12px;
+  margin-top: 16px;
+}
+
+.saldos > div {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  padding: 12px 16px;
+  background: var(--tarjeta);
+  border: 1px solid var(--linea);
+  border-top: 4px solid var(--texto);
+  border-radius: var(--radio);
+}
+
+.saldos strong {
+  font-size: 1.5rem;
+}
+
 .salidaRelayer {
   margin: 16px 0;
 }

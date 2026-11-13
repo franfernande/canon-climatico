@@ -1,6 +1,6 @@
 {
   "red": "fuji",
-  "generado": "2026-11-12T23:22:30.272Z",
+  "generado": "2026-11-13T13:21:48.091Z",
   "explorer": "https://explorer-test.avax.network/c-chain",
   "fuente": "NASA POWER PRECTOTCORR_SUM",
   "punto": {
@@ -788,11 +788,43 @@
     {
       "id": 4,
       "campania": "2014/15",
-      "estado": "Depositado",
+      "estado": "Liquidado",
       "saldoAvax": "0.005",
       "umbralBajo": 2550,
       "umbralAlto": 3050,
       "pctMedio": 20,
+      "pctBajo": 50,
+      "lluviaDecimasMm": 2870,
+      "reparto": {
+        "pctArrendatario": 20,
+        "alDuenoAvax": "0.004",
+        "alArrendatarioAvax": "0.001"
+      },
+      "hashDato": "0x298b95e4542bd218b34a66c38f57213ef96b907b410dd28fe8af470f7738b6dd",
+      "dato": {
+        "ruta": "/datos/fuji/0x6a84f4eb05f415ab414ca593e07b80728491ea15/4.json",
+        "url": "https://power.larc.nasa.gov/api/temporal/monthly/point?parameters=PRECTOTCORR_SUM&community=AG&longitude=-64.13&latitude=-25.12&start=2014&end=2015&format=JSON",
+        "coincideHash": true
+      },
+      "cuentas": {
+        "dueno": "0x7886feDe3654F87CB7c5ce5910431404767A634A",
+        "arrendatario": "0x2649593daD167e8C76d6408fAf7682FDEdDBb51e",
+        "relayer": "0x9FB4fe8c514c19a4D9D851f32b7546136377D3e2"
+      },
+      "links": {
+        "crear": null,
+        "depositar": null,
+        "liquidar": "https://explorer-test.avax.network/c-chain/tx/0xdb0d4e937e394db458de4d840ea3ef9eb6909ee76ca366cd7589deb14aca00c8"
+      }
+    },
+    {
+      "id": 5,
+      "campania": "2014/15",
+      "estado": "Depositado",
+      "saldoAvax": "0.01",
+      "umbralBajo": 2550,
+      "umbralAlto": 3050,
+      "pctMedio": 30,
       "pctBajo": 50,
       "lluviaDecimasMm": null,
       "reparto": null,
@@ -807,6 +839,38 @@
         "crear": null,
         "depositar": null,
         "liquidar": null
+      }
+    },
+    {
+      "id": 6,
+      "campania": "2014/15",
+      "estado": "Liquidado",
+      "saldoAvax": "0.01",
+      "umbralBajo": 2550,
+      "umbralAlto": 3050,
+      "pctMedio": 30,
+      "pctBajo": 50,
+      "lluviaDecimasMm": 2870,
+      "reparto": {
+        "pctArrendatario": 30,
+        "alDuenoAvax": "0.007",
+        "alArrendatarioAvax": "0.003"
+      },
+      "hashDato": "0x0331da013bf4fa7cdf06502cc45f05d451ef731f86022e6cb0619d23e259ee1c",
+      "dato": {
+        "ruta": "/datos/fuji/0x6a84f4eb05f415ab414ca593e07b80728491ea15/6.json",
+        "url": "https://power.larc.nasa.gov/api/temporal/monthly/point?parameters=PRECTOTCORR_SUM&community=AG&longitude=-64.13&latitude=-25.12&start=2014&end=2015&format=JSON",
+        "coincideHash": true
+      },
+      "cuentas": {
+        "dueno": "0x7886feDe3654F87CB7c5ce5910431404767A634A",
+        "arrendatario": "0x2649593daD167e8C76d6408fAf7682FDEdDBb51e",
+        "relayer": "0x9FB4fe8c514c19a4D9D851f32b7546136377D3e2"
+      },
+      "links": {
+        "crear": null,
+        "depositar": null,
+        "liquidar": "https://explorer-test.avax.network/c-chain/tx/0x7f54296007ac62893aa6c36ef9b7bc069e59cdf612c56c95a0fd46120a09a173"
       }
     }
   ]

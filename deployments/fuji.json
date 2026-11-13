@@ -610,6 +610,20 @@
       "lluviaDecimasMm": 2870,
       "hashDato": "0xa526960f550cef56ee8ea16b34ce9c3e9713493d2f1b804cb2e0ae0090b31099",
       "archivo": "sample-data/fuji/0x6a84f4eb05f415ab414ca593e07b80728491ea15/3.json"
+    },
+    {
+      "id": 4,
+      "tx": "0xdb0d4e937e394db458de4d840ea3ef9eb6909ee76ca366cd7589deb14aca00c8",
+      "lluviaDecimasMm": 2870,
+      "hashDato": "0x298b95e4542bd218b34a66c38f57213ef96b907b410dd28fe8af470f7738b6dd",
+      "archivo": "sample-data/fuji/0x6a84f4eb05f415ab414ca593e07b80728491ea15/4.json"
+    },
+    {
+      "id": 6,
+      "tx": "0x7f54296007ac62893aa6c36ef9b7bc069e59cdf612c56c95a0fd46120a09a173",
+      "lluviaDecimasMm": 2870,
+      "hashDato": "0x0331da013bf4fa7cdf06502cc45f05d451ef731f86022e6cb0619d23e259ee1c",
+      "archivo": "sample-data/fuji/0x6a84f4eb05f415ab414ca593e07b80728491ea15/6.json"
     }
   ],
   "retiros": [

@@ -19,6 +19,7 @@ import {
   urlParaVentana,
 } from "@/lib/cadena";
 import { avax, mm, mmEntero, tramoDe } from "@/lib/formato";
+import { Saldos } from "./Saldos";
 import { Direccion, EstadoTransaccion, useFlujo, useTransaccion } from "./Wallet";
 import s from "./flujo.module.css";
 
@@ -217,6 +218,8 @@ export function VistaAlquiler({ id }: { id: number }) {
           </ol>
         </section>
       </div>
+
+      <Saldos />
 
       <section className={s.acciones} aria-live="polite">
         {a.estado === "Creado" && (
